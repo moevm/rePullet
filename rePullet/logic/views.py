@@ -12,6 +12,10 @@ def start_page():
 def go_test():
     return render_template('result.html')
 
+@app.route('/new/')
+def go_new():
+    return render_template('in.html')
+
 @app.route('/t/')
 def go_tl():
     return render_template('testtimeline.html')
