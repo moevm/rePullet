@@ -1,3 +1,6 @@
+from urllib.parse import urlparse
+
+from flask import request
 from rePullet import app
 from flask import render_template
 
@@ -12,6 +15,11 @@ def start_page():
 def go_test():
     return render_template('result.html')
 
+@app.route('/preview', methods=['POST'])
+def to_preview():
+    personId = request.form.get('url')
+    return render_template('res.html', ddd=personId)
+
 @app.route('/new/')
 def go_new():
     return render_template('in.html')
@@ -21,11 +29,13 @@ def go_tl():
     return render_template('testtimeline.html')
 
 @app.route('/api/groups/<urluser>/<urlrepo>',defaults={'ending': None})
+@app.route('/api/groups/<urluser>/<urlrepo>/',defaults={'ending': None})
 @app.route('/api/groups/<urluser>/<urlrepo>/<ending>')
 def get_groups(urluser,urlrepo,ending):
     return group_gen(urluser,urlrepo)
 
 @app.route('/api/items/<urluser>/<urlrepo>',defaults={'ending': None})
+@app.route('/api/items/<urluser>/<urlrepo>/',defaults={'ending': None})
 @app.route('/api/items/<urluser>/<urlrepo>/<ending>')
 def get_items(urluser,urlrepo,ending):
     return items_gen(urluser,urlrepo)

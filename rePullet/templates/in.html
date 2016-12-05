@@ -41,8 +41,8 @@
           <div class="col-md-8 col-md-offset-2 centered">
             <h1>Wanna build pull requests timeline<br/>of repository?</h1>
             <div class="mtb">
-              <form role="form" action="register.php" method="post" enctype="plain">
-                    <input type="url" name="url" class="subscribe-input" placeholder="Enter repository url..." required>
+              <form id="mainForm" role="form" action="/preview" method="post" enctype="plain">
+                    <input name="url" type='url' class="subscribe-input" placeholder="Enter github repository url..." required>
                 <button class='btn btn-conf btn-green' type="submit">Search</button>
               </form>
             </div><!--/mt-->
