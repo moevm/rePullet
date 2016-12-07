@@ -13,6 +13,7 @@ def group_gen(urluser, urlrepo):
             userslist.append(current_user)
     return json.dumps(userslist)
 
+
 def items_gen(urluser, urlrepo):
     itemslist = []
     for pull in g.get_repo(urluser + '/' + urlrepo).get_pulls('all'):
