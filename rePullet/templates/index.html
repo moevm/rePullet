@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="author" content="r.lurye">
     <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
 
     <title>Project Avalance</title>
@@ -41,7 +41,7 @@
           <div class="col-md-8 col-md-offset-2 centered">
             <h1>Wanna build pull requests timeline<br/>of repository?</h1>
             <div class="mtb">
-              <form id="mainForm" role="form" action="/preview" method="post" enctype="plain">
+              <form id="mainForm" role="form" action="/dashboard" method="post" enctype="plain">
                     <input name="url" type='url' class="subscribe-input" placeholder="Enter github repository url..." required>
                 <button class='btn btn-conf btn-green' type="submit">Search</button>
               </form>

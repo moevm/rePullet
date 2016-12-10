@@ -21,6 +21,13 @@ def go_prev():
         return redirect(url_for('go_prev'))
     return render_template('preview.html', ddd=session.get('urlrepo'))
 
+@app.route('/dashboard', methods=['GET', 'POST'])
+def go_dash():
+    if request.form.get('url'):
+        session['urlrepo'] = request.form.get('url')
+        return redirect(url_for('go_dash'))
+    return render_template('dashboard.html', ddd=session.get('urlrepo'))
+
 @app.route('/api/groups/<urluser>/<urlrepo>',defaults={'ending': None})
 @app.route('/api/groups/<urluser>/<urlrepo>/',defaults={'ending': None})
 @app.route('/api/groups/<urluser>/<urlrepo>/<ending>')
@@ -32,3 +39,10 @@ def get_groups(urluser,urlrepo,ending):
 @app.route('/api/items/<urluser>/<urlrepo>/<ending>')
 def get_items(urluser,urlrepo,ending):
     return items_gen(urluser,urlrepo)
+
+
+@app.route('/api/options/<urluser>/<urlrepo>',defaults={'ending': None})
+@app.route('/api/options/<urluser>/<urlrepo>/',defaults={'ending': None})
+@app.route('/api/options/<urluser>/<urlrepo>/<ending>')
+def get_options(urluser,urlrepo,ending):
+    return options_gen(urluser,urlrepo)
