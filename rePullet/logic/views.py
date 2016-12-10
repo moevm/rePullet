@@ -10,23 +10,9 @@ from flask import render_template
 
 from rePullet.logic.jsongen import *
 
-
-@app.route('/old')
-def start_page():
-    return render_template('index.html')
-
-@app.route('/g/', methods=['GET', 'POST'])
-def go_test():
-    return render_template('result.html')
-
-@app.route('/oldpreview', methods=['POST'])
-def to_preview():
-    personId = request.form.get('url')
-    return render_template('res.html', ddd=personId)
-
 @app.route('/', methods=['GET', 'POST'])
 def go_new():
-    return render_template('in.html')
+    return render_template('index.html')
 
 @app.route('/preview', methods=['GET', 'POST'])
 def go_prev():
