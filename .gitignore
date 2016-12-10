@@ -4,6 +4,7 @@ usefulcommands.txt
 rePullet_site.conf
 rePullet_wsgi.wsgi
 config.py
+run.py
 .gitignore
 __pycache__/
 rePullet/__pycache__/

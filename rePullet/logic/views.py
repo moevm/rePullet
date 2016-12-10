@@ -19,10 +19,6 @@ def start_page():
 def go_test():
     return render_template('result.html')
 
-@app.route('/t/')
-def go_tl():
-    return render_template('testtimeline.html')
-
 @app.route('/oldpreview', methods=['POST'])
 def to_preview():
     personId = request.form.get('url')

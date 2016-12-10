@@ -9,3 +9,5 @@ bootstrap = Bootstrap(app)
 
 from rePullet.logic import views
 
+# if __name__ == '__main__':
+#     app.run()
