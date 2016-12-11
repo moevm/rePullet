@@ -35,6 +35,7 @@ $(document).ready(function() {
             timeline.setItems(items);
             timeline.setGroups(groups);
             document.getElementById("main-content").style.display = 'block';
+            document.getElementById("vis-content").style.display = 'block';
             document.getElementById("preview-container").style.display = 'none';
             document.getElementById("preview-text").style.display = 'none';
             document.getElementById("preview-loading").style.display = 'none';
