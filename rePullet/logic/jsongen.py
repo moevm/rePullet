@@ -35,4 +35,6 @@ def options_gen(urluser, urlrepo):
     options['zoomMin'] = '60000'
     options['zoomMax'] = (datetime.datetime.now()-min(datetimelist)).total_seconds() * 3000
     options['maxHeight'] = '550px'
+    # options['type'] = 'point'
+    # options['showMajorLabels'] = 'false'
     return json.dumps(options)

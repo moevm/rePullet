@@ -6,17 +6,17 @@ $(document).ready(function() {
         document.getElementById("preview-text").innerHTML="NO DATA";
         return
     }
-    document.getElementById("preview-text").innerHTML="Fetching pull requests data...";
+    document.getElementById("preview-text").innerHTML=" Fetching pull requests data...";
     //document.getElementById("repo").value = 'api/groups' + getLocationPathname(url);
     $.when(
         $.getJSON('/api/groups'+getLocationPathname(url), function (data) {
             groupsData = data;
-            document.getElementById("preview-text").innerHTML="Fetch timeline options...";
+            document.getElementById("preview-text").innerHTML=" Fetch timeline options...";
 
         }),
         $.getJSON('/api/options'+getLocationPathname(url), function (data) {
             optionsData = data;
-            document.getElementById("preview-text").innerHTML="Compiling timeline. " +
+            document.getElementById("preview-text").innerHTML=" Compiling timeline. " +
                 "This may take a couple of minutes while we slice & dice the data....";
         }),
         $.getJSON('/api/items'+getLocationPathname(url), function (data) {

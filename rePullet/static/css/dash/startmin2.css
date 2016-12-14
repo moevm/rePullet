@@ -70,7 +70,7 @@ html, body {
 @media(min-width:768px) {
     #page-wrapper {
         position: inherit;
-        margin-left: 250px;
+        margin-left: 350px;
         padding: 30px 30px 0 30px;
         border-left: 1px solid #e7e7e7;
     }
@@ -193,6 +193,16 @@ html, body {
     padding-left: 37px;
 }
 
+.sidebar .nav-second-level li div {
+    padding-left: 37px;
+    padding-right: 5px;
+background-color: #eee;
+}
+
+.sidebar ul li div.active {
+    background-color: #eee;
+}
+
 .sidebar .nav-third-level li a {
     padding-left: 52px;
 }
@@ -201,7 +211,7 @@ html, body {
     .sidebar {
         z-index: 1;
         position: absolute;
-        width: 250px;
+        width: 350px;
         margin-top: 51px;
     }
 
