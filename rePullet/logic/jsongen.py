@@ -1,8 +1,11 @@
 import json
 
 import datetime
+from github import PullRequest
+
 
 from rePullet.logic import g
+
 
 
 def group_gen(urluser, urlrepo):
@@ -16,13 +19,34 @@ def group_gen(urluser, urlrepo):
     return json.dumps(userslist)
 
 
-def items_gen(urluser, urlrepo):
+def items_gen(urluser, urlrepo, params):
     itemslist = []
-    for pull in g.get_repo(urluser + '/' + urlrepo).get_pulls('all'):
-        itemslist.append({'id': pull.id,
-                          'group': pull.user.login,
-                          'content': pull.title,
-                          'start': pull.created_at.strftime('%Y-%m-%d %H:%M')})
+
+    repo = g.get_repo(urluser + '/' + urlrepo)
+    for pull in repo.get_pulls('all'):
+        #проверяем, закрыт ли PR
+        if pull.state == 'closed':
+            # получаем номер
+            issue = repo.get_issue(pull.number)
+            if issue.user.login == issue.closed_by.login:
+                continue  # не учитываем PR, если открывший и закрывший PR совпали
+
+            if 'cl' in params:
+                if issue.closed_by.login != params['cl']:
+                    continue #не учитываем PR, закрытые не указанным пользователем
+            #закрыт, смотрим автора закрытия
+            itemslist.append({'id': pull.id,
+                              'group': pull.user.login,
+                              'content': pull.title,
+                              'start': pull.created_at.strftime('%Y-%m-%d %H:%M'),
+                              'end': pull.closed_at.strftime('%Y-%m-%d %H:%M'),
+                              'className': 'grey'})
+        else:
+            itemslist.append({'id': pull.id,
+                              'group': pull.user.login,
+                              'content': pull.title,
+                              'start': pull.created_at.strftime('%Y-%m-%d %H:%M'),
+                              'end': datetime.datetime.now().strftime('%Y-%m-%d %H:%M')})
     return json.dumps(itemslist)
 
 def options_gen(urluser, urlrepo):

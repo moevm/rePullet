@@ -4,6 +4,7 @@ from flask import redirect
 from flask import request
 from flask import session
 from flask import url_for
+from flask.wrappers import RequestBase
 
 from rePullet import app
 from flask import render_template
@@ -38,7 +39,8 @@ def get_groups(urluser,urlrepo,ending):
 @app.route('/api/items/<urluser>/<urlrepo>/',defaults={'ending': None})
 @app.route('/api/items/<urluser>/<urlrepo>/<ending>')
 def get_items(urluser,urlrepo,ending):
-    return items_gen(urluser,urlrepo)
+    params = request.args.to_dict()
+    return items_gen(urluser,urlrepo,params)
 
 
 @app.route('/api/options/<urluser>/<urlrepo>',defaults={'ending': None})

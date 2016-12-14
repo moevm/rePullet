@@ -1,4 +1,26 @@
 $(document).ready(function() {
+    getTimeline();
+});
+
+function getLocationPathname(href) {
+    var l = document.createElement("a");
+    l.href = href;
+    return l.pathname
+}
+
+function getOptionsString() {
+    optionsString = "?";
+    var obj = {}
+    var cl_user = document.getElementById("cl-user").value;
+    if(cl_user != ""){
+        obj['cl'] = cl_user;
+    }
+    optionsString += jQuery.param(obj);
+    document.getElementById("testjs").src = (optionsString.localeCompare("?") ? optionsString : "");
+    return x = (optionsString.localeCompare("?") ? optionsString : "");
+}
+
+function getTimeline() {
     document.getElementById("preview-text").innerHTML="Fetching repository information...";
     var groupsData, itemsData, optionsData;
     var url = document.getElementById("urlrepo").getAttribute('src');
@@ -7,19 +29,20 @@ $(document).ready(function() {
         return
     }
     document.getElementById("preview-text").innerHTML=" Fetching pull requests data...";
+    var optString = getOptionsString();
     //document.getElementById("repo").value = 'api/groups' + getLocationPathname(url);
     $.when(
-        $.getJSON('/api/groups'+getLocationPathname(url), function (data) {
+        $.getJSON('/api/groups'+getLocationPathname(url)+optString, function (data) {
             groupsData = data;
             document.getElementById("preview-text").innerHTML=" Fetch timeline options...";
 
         }),
-        $.getJSON('/api/options'+getLocationPathname(url), function (data) {
+        $.getJSON('/api/options'+getLocationPathname(url)+optString, function (data) {
             optionsData = data;
             document.getElementById("preview-text").innerHTML=" Compiling timeline. " +
                 "This may take a couple of minutes while we slice & dice the data....";
         }),
-        $.getJSON('/api/items'+getLocationPathname(url), function (data) {
+        $.getJSON('/api/items'+getLocationPathname(url)+optString, function (data) {
             itemsData = data;
         })
     ).then(function () {
@@ -44,10 +67,4 @@ $(document).ready(function() {
             document.getElementById("preview-text").innerHTML="NO DATA";
         }
     })
-});
-
-function getLocationPathname(href) {
-    var l = document.createElement("a");
-    l.href = href;
-    return l.pathname
 }

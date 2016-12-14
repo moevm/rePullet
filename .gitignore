@@ -1,6 +1,5 @@
 venv/
 .idea/
-usefulcommands.txt
 rePullet_site.conf
 rePullet_wsgi.wsgi
 config.py

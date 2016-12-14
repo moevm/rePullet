@@ -21,6 +21,8 @@
     <link href="{{ url_for('static', filename='css/dash/morris.css') }}" rel="stylesheet">
     <!-- Custom Fonts -->
     <link href="{{ url_for('static', filename='css/font-awesome.min.css') }}" rel="stylesheet">
+    <!-- CSS for timeline objects -->
+    <link href="{{ url_for('static', filename='css/tlobjects.css') }}" rel="stylesheet">
       <style>
         #visualization {
             box-sizing: border-box;
@@ -38,6 +40,7 @@
 </head>
 <body>
 <embed id='urlrepo' src="{{ ddd }}" hidden="true"></embed>
+<embed id='testjs' src="" hidden="true"></embed>
 <div id="wrapper">
 
     <!-- Navigation -->
@@ -126,9 +129,9 @@
                                         <div>
                                             <div class="input-group">
                                                 <span class="input-group-addon"><i class="fa fa-github fa-lg"></i></span>
-                                                <input type="text" class="form-control" placeholder="Username">
+                                                <input id="cl-user" type="text" class="form-control" placeholder="Username">
                                             </div>
-                                            <button type="submit" class="btn btn-default center-block">Submit</button>
+                                            <button type="submit" class="btn btn-default center-block" onclick="getTimeline()">Submit</button>
                                         </div>
 
                                     </li>
@@ -216,7 +219,7 @@
 <!-- Custom Theme JavaScript -->
 <script src="{{ url_for('static', filename='js/dash/startmin.js') }}"></script>
 <!-- Main API in JavaSctipt -->
-{#<script src="{{ url_for('static', filename='js/api.1.1.js') }}"></script>#}
+<script src="{{ url_for('static', filename='js/api.1.1.js') }}"></script>
 <!-- Moment for Timeline-->
 <script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
 <!-- VIS JS lib -->
