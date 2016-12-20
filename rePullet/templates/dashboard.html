@@ -17,6 +17,8 @@
     <link href="{{ url_for('static', filename='css/dash/timeline.css') }}" rel="stylesheet">
     <!-- Custom CSS -->
     <link href="{{ url_for('static', filename='css/dash/startmin2.css') }}" rel="stylesheet">
+    <!-- Datepicker CSS -->
+    <link href="{{ url_for('static', filename='css/dash/bootstrap-datepicker.min.css') }}" rel="stylesheet">
     <!-- Morris Charts CSS -->
     <link href="{{ url_for('static', filename='css/dash/morris.css') }}" rel="stylesheet">
     <!-- Custom Fonts -->
@@ -126,14 +128,13 @@
                                 <a href="#"> Merged rules<span class="fa arrow"></span></a>
                                 <ul class="nav nav-third-level">
                                     <li>
-                                        <div>
+                                        <div class="div-gr">
                                             <div class="input-group">
                                                 <span class="input-group-addon"><i class="fa fa-github fa-lg"></i></span>
                                                 <input id="cl-user" type="text" class="form-control" placeholder="Username">
                                             </div>
                                             <button type="submit" class="btn btn-default center-block" onclick="getTimeline()">Submit</button>
                                         </div>
-
                                     </li>
                                 </ul>
                             </li>
@@ -141,7 +142,27 @@
                                 <a href="#">Deadline period <span class="fa arrow"></span></a>
                                 <ul class="nav nav-third-level">
                                     <li>
-                                        <a href="#" class="text-center">Third Level Item</a>
+                                        <div class="div-gr">
+                                            <div class="input-group input-daterange">
+                                                <input type="text" class="form-control" value="2012-04-05">
+                                                <span class="input-group-addon">to</span>
+                                                <input type="text" class="form-control" value="2012-04-19">
+                                                <span class="input-group-addon">
+                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                </span>
+                                            </div>
+                                            <button type="submit" class="btn btn-block" onclick="getTimeline()">+</button>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#">Traking <span class="fa arrow"></span></a>
+                                <ul class="nav nav-third-level">
+                                    <li>
+                                        <div class="div-gr">
+                                            <label><input type="checkbox" value=""> Show self-closed pull requests</label>
+                                        </div>
                                     </li>
                                 </ul>
                             </li>
@@ -226,6 +247,8 @@
 <script src="{{ url_for('static', filename='js/dash/metisMenu.min.js') }}"></script>
 <!-- Custom Theme JavaScript -->
 <script src="{{ url_for('static', filename='js/dash/startmin.js') }}"></script>
+<!-- Datepicker JavaScript -->
+<script src="{{ url_for('static', filename='js/dash/bootstrap-datepicker.min.js') }}"></script>
 <!-- Main API in JavaSctipt -->
 <script src="{{ url_for('static', filename='js/api.1.1.js') }}"></script>
 <!-- Moment for Timeline-->
