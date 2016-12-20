@@ -39,9 +39,7 @@ def items_gen(urluser, urlrepo, params):
         if pull.comments != 0:
             rebuild = count_rebuild(issue, pull)
         # теперь узнаем, содержит ли отчет о лабе (pdf, doc(x))
-        report = 0
-        if haveReport(pull):
-            report = 1
+        report = countReport(pull)
         if pull.state == 'closed':
             itemslist.append({'id': pull.id,
                               'group': pull.user.login,
@@ -72,6 +70,7 @@ def options_gen(urluser, urlrepo):
     options['zoomMax'] = (datetime.datetime.now()-min(datetimelist)).total_seconds() * 3000
     options['maxHeight'] = '550px'
     options['dataAttributes'] = ['rework', 'report']
+    options['clickToUse'] = 'true'
     # options['type'] = 'point'
     # options['showMajorLabels'] = 'false'
     return json.dumps(options)

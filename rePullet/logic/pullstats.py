@@ -22,15 +22,16 @@ def count_rebuild(issue, pull):
             break
     return rebuild
 
-def haveReport(pull):
+def countReport(pull):
     """
     :param pull: PullRequest
     :type pull: PullRequest
     :return: bool
     """
+    count = 0
     for fl in pull.get_files():
         if (fl.filename.endswith(".pdf")
                 or fl.filename.endswith(".doc")
                 or fl.filename.endswith(".docx")):
-            return True
-    return False
+            count+=1
+    return count

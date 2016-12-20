@@ -127,7 +127,7 @@ html, body {
     min-height: 0;
 }
 
-.navbar-top-links .dropdown-menu li a div {
+.navbar-top-links .dropdown-menu li a .div-gr {
     white-space: normal;
 }
 
@@ -193,7 +193,7 @@ html, body {
     padding-left: 37px;
 }
 
-.sidebar .nav-second-level li div {
+.sidebar .nav-second-level li .div-gr {
     padding-left: 37px;
     padding-right: 5px;
 background-color: #eee;
@@ -204,6 +204,10 @@ background-color: #eee;
 }
 
 .sidebar .nav-third-level li a {
+    padding-left: 52px;
+}
+
+.sidebar .nav-third-level li .div-gr {
     padding-left: 52px;
 }
 

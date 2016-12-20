@@ -68,3 +68,8 @@ function getTimeline() {
         }
     })
 }
+
+
+$('.input-daterange input').each(function() {
+    $(this).datepicker("clearDates");
+});
