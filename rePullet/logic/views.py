@@ -44,13 +44,6 @@ def index():
         print('hello')
     return render_template('index.html', user=g.user)
 
-@app.route('/preview', methods=['GET', 'POST'])
-def go_prev():
-    if request.form.get('url'):
-        session['urlrepo'] = request.form.get('url')
-        return redirect(url_for('go_prev'))
-    return render_template('preview.html', ddd=session.get('urlrepo'))
-
 @app.route('/dashboard', methods=['GET', 'POST'])
 def go_dash():
     if g.user is None:

@@ -70,7 +70,7 @@ html, body {
 @media(min-width:768px) {
     #page-wrapper {
         position: inherit;
-        margin-left: 350px;
+        margin-left: 300px;
         padding: 30px 30px 0 30px;
         border-left: 1px solid #e7e7e7;
     }
@@ -215,7 +215,7 @@ background-color: #eee;
     .sidebar {
         z-index: 1;
         position: absolute;
-        width: 350px;
+        width: 300px;
         margin-top: 51px;
     }
 
