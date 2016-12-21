@@ -62,12 +62,27 @@ function getTimeline() {
             document.getElementById("preview-container").style.display = 'none';
             document.getElementById("preview-text").style.display = 'none';
             document.getElementById("preview-loading").style.display = 'none';
+            timeline.on('select', function (properties) {
+              logEvent(properties);
+            });
+            function logEvent(properties) {
+              var log = document.getElementById('log');
+              var ss = items.get(properties.items);
+              if (typeof ss[0] !== 'undefined') {
+                  var msg = document.createElement('div');
+                  msg.innerHTML = ss[0].content+ '' + ss[0].start;
+                log.firstChild ? log.insertBefore(msg, log.firstChild) : log.appendChild(msg);
+              }
+            }
         }
         else{
             document.getElementById("preview-text").innerHTML="NO DATA";
         }
     })
 }
+
+
+
 
 
 $('.input-daterange input').each(function() {

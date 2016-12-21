@@ -3,6 +3,7 @@ from flask_bootstrap import Bootstrap
 from config import Config as c
 
 app = Flask(__name__)
+# app._static_folder = '/static'
 app.config['SECRET_KEY'] = c.SECRET_KEY
 app.config['GITHUB'] = {
     'consumer_key': c.consumer_key,

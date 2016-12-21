@@ -66,11 +66,11 @@ def options_gen(urluser, urlrepo):
         datetimelist.append(pull.created_at)
     options['min'] = (min(datetimelist)-datetime.timedelta(days=50)).strftime('%Y-%m-%d %H:%M')
     options['max'] = (datetime.datetime.now()+datetime.timedelta(days=50)).strftime('%Y-%m-%d %H:%M')
-    options['zoomMin'] = '60000'
+    options['zoomMin'] = 60000
     options['zoomMax'] = (datetime.datetime.now()-min(datetimelist)).total_seconds() * 3000
     options['maxHeight'] = '550px'
     options['dataAttributes'] = ['rework', 'report']
-    options['clickToUse'] = 'true'
+    options['clickToUse'] = True
     # options['type'] = 'point'
     # options['showMajorLabels'] = 'false'
     return json.dumps(options)
