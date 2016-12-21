@@ -2,8 +2,9 @@ from flask import redirect
 from flask import request
 from flask import session
 from flask import url_for, jsonify
-
+from flask import g
 from flask_oauthlib.client import OAuth
+from werkzeug.wsgi import get_current_url
 
 from rePullet import app
 from flask import render_template
@@ -12,14 +13,10 @@ from rePullet.logic.jsongen import *
 
 from config import Config as c
 
-
-oauth = OAuth(app)
-
-gh_instanse = oauth.remote_app(
+oauth = OAuth()
+gh = oauth.remote_app(
     'github',
-    consumer_key= c.consumer_key,
-    consumer_secret=c.consumer_secret,
-    request_token_params= c.scope,
+    request_token_params={'scope': 'user:email'},
     # consumer_key='a11a1bda412d928fb39a',
     # consumer_secret='92b7cf30bc42c49d589a10372c3f9ff3bb310037',
     # request_token_params={'scope': 'user:email'},
@@ -27,12 +24,25 @@ gh_instanse = oauth.remote_app(
     request_token_url=None,
     access_token_method='POST',
     access_token_url='https://github.com/login/oauth/access_token',
-    authorize_url='https://github.com/login/oauth/authorize'
+    authorize_url='https://github.com/login/oauth/authorize',
+    app_key = 'GITHUB'
+
 )
 
+
+@app.before_request
+def before_request():
+    g.user = None
+    #print(g.user)
+    if 'github_token' in session:
+        g.user = session['github_token']
+        #print(g.user)
+
 @app.route('/', methods=['GET', 'POST'])
-def go_new():
-    return render_template('index.html')
+def index():
+    if g.user is not None:
+        print('hello')
+    return render_template('index.html', user=g.user)
 
 @app.route('/preview', methods=['GET', 'POST'])
 def go_prev():
@@ -43,6 +53,8 @@ def go_prev():
 
 @app.route('/dashboard', methods=['GET', 'POST'])
 def go_dash():
+    if g.user is None:
+        return redirect(url_for('login', next=request.url))
     if request.form.get('url'):
         session['urlrepo'] = request.form.get('url')
         return redirect(url_for('go_dash'))
@@ -72,9 +84,10 @@ def get_options(urluser,urlrepo,ending):
 # login part
 #
 
+
 @app.route('/login')
 def login():
-    return gh_instanse.authorize(callback=url_for('authorized', _external=True))
+    return gh.authorize(callback=url_for('authorized', next=request.args.get('next'), _external=True))
 
 
 @app.route('/logout')
@@ -82,9 +95,10 @@ def logout():
     session.pop('github_token', None)
     return redirect(url_for('index'))
 
+
 @app.route('/login/authorized')
 def authorized():
-    resp = gh_instanse.authorized_response()
+    resp = gh.authorized_response()
     if resp is None or resp.get('access_token') is None:
         return 'Access denied: reason=%s error=%s resp=%s' % (
             request.args['error'],
@@ -92,9 +106,11 @@ def authorized():
             resp
         )
     session['github_token'] = (resp['access_token'], '')
-    me = gh_instanse.get('user')
-    return jsonify(me.data)
+    me = gh.get('user')
+    if request.args.get('next'):
+        return redirect(request.args.get('next'))
+    return redirect(url_for('index', next=request.args.get('next')))
 
-@gh_instanse.tokengetter
-def get_gh_instance_oauth_token():
+@gh.tokengetter
+def get_gh_oauth_token():
     return session.get('github_token')

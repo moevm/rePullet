@@ -11,7 +11,7 @@
     <title>Project Avalance</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="{{ url_for('static', filename='css/bootstrap.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
     <!-- Custom styles for this template -->
     <link href="{{ url_for('static', filename='css/font-awesome.min.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
@@ -31,11 +31,19 @@
 
     <div id="h">
       <div class="logo" name="top">Project Avalance</div>
-      <div class="social hidden-xs">
-        <a href="https://twitter.com/r_lurye"><i class="fa fa-twitter"></i></a>
-        <a href="https://www.instagram.com/cherepkova.yulya/"><i class="fa fa-instagram"></i></a>
-        <a href="https://vk.com/r.lurye"><i class="fa fa-vk"></i></a>
-      </div>
+
+        {% if user %}
+            <h6>{{ user }}</h6>
+        {% else %}
+            <div>
+                <a href='/login' class='btn btn-conf btn-green' type="submit">Sign up</a>
+            </div>
+        {% endif %}
+        <div class="social hidden-xs">
+            <a href="https://twitter.com/r_lurye"><i class="fa fa-twitter"></i></a>
+            <a href="https://www.instagram.com/cherepkova.yulya/"><i class="fa fa-instagram"></i></a>
+            <a href="https://vk.com/r.lurye"><i class="fa fa-vk"></i></a>
+        </div>
         <nav class="pull-right nav-collapse collapse">
             <ul id="menu-main" class="nav">
                 <li><a title="portfolio" href="#portfolio">Portfolio</a></li>
