@@ -1,4 +1,7 @@
-from github import Github
 from config import Config as c
+from pymongo import MongoClient
+from github import Github
 
-g = Github(c.GTNAME, c.GTPASS,timeout=80)
+class Ins:
+    gt = None
+    dbinstance = MongoClient(c.MONGOHOST, c.MONGOPORT)[c.MONGONAME]

@@ -1,17 +1,18 @@
 from flask import redirect
 from flask import request
 from flask import session
-from flask import url_for, jsonify
+from flask import url_for
 from flask import g
 from flask_oauthlib.client import OAuth
-from werkzeug.wsgi import get_current_url
 
 from rePullet import app
+from rePullet.logic import Ins
+
 from flask import render_template
 
 from rePullet.logic.jsongen import *
+from github import Github
 
-from config import Config as c
 
 oauth = OAuth()
 gh = oauth.remote_app(
@@ -73,6 +74,13 @@ def get_items(urluser,urlrepo,ending):
 def get_options(urluser,urlrepo,ending):
     return options_gen(urluser,urlrepo)
 
+@app.route('/api/user',defaults={'ending': None})
+@app.route('/api/user/',defaults={'ending': None})
+@app.route('/api/user/<ending>')
+def get_user(ending):
+    return user_gen();
+
+
 #
 # login part
 #
@@ -98,8 +106,12 @@ def authorized():
             request.args['error_description'],
             resp
         )
+    #success
     session['github_token'] = (resp['access_token'], '')
-    me = gh.get('user')
+    Ins.gt = Github(login_or_token=resp['access_token'])
+    print(Ins.gt.get_user())
+    print(session['github_token'])
+    print(gh.get('user'))
     if request.args.get('next'):
         return redirect(request.args.get('next'))
     return redirect(url_for('index', next=request.args.get('next')))
