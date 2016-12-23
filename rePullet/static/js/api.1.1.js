@@ -66,12 +66,24 @@ function getTimeline() {
               logEvent(properties);
             });
             function logEvent(properties) {
-              var log = document.getElementById('log');
               var ss = items.get(properties.items);
               if (typeof ss[0] !== 'undefined') {
-                  var msg = document.createElement('div');
-                  msg.innerHTML = ss[0].content+ '' + ss[0].start;
-                log.firstChild ? log.insertBefore(msg, log.firstChild) : log.appendChild(msg);
+                  $("#prhint tbody tr").remove();
+                  insertRow('Title', ss[0].content);
+                  insertRow('Author', ss[0].group);
+                  insertRow('Created at', ss[0].start);
+                  if(ss[0].className == 'grey'){
+                      insertRow('Status', 'closed');
+                      insertRow('Closed at', ss[0].end);
+                  }
+                  else
+                    insertRow('Status', 'open');
+                  insertRow('Rework', ss[0].rework);
+                  insertRow('Report', ss[0].report);
+                  document.getElementById('prhint').style.display = 'table';
+              }
+              else {
+                  document.getElementById('prhint').style.display = 'none';
               }
             }
         }
@@ -81,8 +93,14 @@ function getTimeline() {
     })
 }
 
-
-
+function insertRow(text1, text2) {
+    var tableRef = document.getElementById('prhint').getElementsByTagName('tbody')[0];
+    var newRow   = tableRef.insertRow(tableRef.rows.length);
+    var cell1 = newRow.insertCell(0);
+    var cell2 = newRow.insertCell(1);
+    cell1.innerHTML = text1;
+    cell2.innerHTML = text2;
+}
 
 
 $('.input-daterange input').each(function() {

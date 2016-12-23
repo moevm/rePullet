@@ -46,11 +46,11 @@ def index():
 
 @app.route('/dashboard', methods=['GET', 'POST'])
 def go_dash():
-    if g.user is None:
-        return redirect(url_for('login', next=request.url))
     if request.form.get('url'):
         session['urlrepo'] = request.form.get('url')
         return redirect(url_for('go_dash'))
+    if g.user is None:
+        return redirect(url_for('login', next=request.url))
     return render_template('dashboard.html', ddd=session.get('urlrepo'))
 
 @app.route('/api/groups/<urluser>/<urlrepo>',defaults={'ending': None})
