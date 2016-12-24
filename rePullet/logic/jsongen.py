@@ -1,3 +1,5 @@
+from flask import g
+
 import json
 from flask import jsonify
 import datetime
@@ -5,13 +7,11 @@ from rePullet.logic.pullstats import *
 
 from rePullet.logic import Ins
 
-
-
 def group_gen(urluser, urlrepo):
     #a = urlpart.split('/')
     #making github great again
     userslist = []
-    for pull in Ins.gt.get_repo(urluser+'/'+urlrepo).get_pulls('all'):
+    for pull in g.user.ghI.get_repo(urluser+'/'+urlrepo).get_pulls('all'):
         current_user = {'id': pull.user.login, 'content': pull.user.login}
         if current_user not in userslist:
             userslist.append(current_user)
@@ -21,7 +21,7 @@ def group_gen(urluser, urlrepo):
 def items_gen(urluser, urlrepo, params):
     itemslist = []
 
-    repo = Ins.gt.get_repo(urluser + '/' + urlrepo)
+    repo = g.user.ghI.get_repo(urluser + '/' + urlrepo)
     for pull in repo.get_pulls('all'):
         #проверяем, закрыт ли PR
         issue = repo.get_issue(pull.number)
@@ -62,7 +62,7 @@ def items_gen(urluser, urlrepo, params):
 def options_gen(urluser, urlrepo):
     options = {}
     datetimelist = []
-    for pull in Ins.gt.get_repo(urluser + '/' + urlrepo).get_pulls('all'):
+    for pull in g.user.ghI.get_repo(urluser + '/' + urlrepo).get_pulls('all'):
         datetimelist.append(pull.created_at)
     options['min'] = (min(datetimelist)-datetime.timedelta(days=50)).strftime('%Y-%m-%d %H:%M')
     options['max'] = (datetime.datetime.now()+datetime.timedelta(days=50)).strftime('%Y-%m-%d %H:%M')
@@ -77,5 +77,13 @@ def options_gen(urluser, urlrepo):
 
 
 def user_gen():
-    print(Ins.gt.get_user().login)
-    return jsonify('')
+    return jsonify(str(g.user))
+    # k = noUser(g.user.ghI)
+    # if k:
+    #     return k
+    # print(g.user.ghI.get_user().login)
+    # return jsonify(g.user.ghI.get_user().login)
+
+
+def noUser(user):
+    return jsonify({"message": "Need to github authentication first!"}) if user is None else False

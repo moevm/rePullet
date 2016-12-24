@@ -1,17 +1,15 @@
-from flask import redirect
-from flask import request
-from flask import session
-from flask import url_for
-from flask import g
+from flask import redirect, render_template, request, session, url_for, g
 from flask_oauthlib.client import OAuth
+from flask_login import login_required, login_user, logout_user, current_user
+from github import Github
 
-from rePullet import app
+
+from rePullet.logic.User import User
+from rePullet.logic.gh import *
+from rePullet import app, login_manager
 from rePullet.logic import Ins
 
-from flask import render_template
-
 from rePullet.logic.jsongen import *
-from github import Github
 
 
 oauth = OAuth()
@@ -33,25 +31,22 @@ gh = oauth.remote_app(
 
 @app.before_request
 def before_request():
-    g.user = None
-    #print(g.user)
-    if 'github_token' in session:
-        g.user = session['github_token']
-        #print(g.user)
+    g.user = current_user
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    if g.user is not None:
+    if g.user is None:
         print('hello')
     return render_template('index.html', user=g.user)
 
 @app.route('/dashboard', methods=['GET', 'POST'])
+@login_required
 def go_dash():
     if request.form.get('url'):
         session['urlrepo'] = request.form.get('url')
         return redirect(url_for('go_dash'))
     if g.user is None:
-        return redirect(url_for('login', next=request.url))
+        return redirect(url_for('login', next=request.url), code=307) # POST = 307
     return render_template('dashboard.html', ddd=session.get('urlrepo'))
 
 @app.route('/api/groups/<urluser>/<urlrepo>',defaults={'ending': None})
@@ -77,23 +72,30 @@ def get_options(urluser,urlrepo,ending):
 @app.route('/api/user',defaults={'ending': None})
 @app.route('/api/user/',defaults={'ending': None})
 @app.route('/api/user/<ending>')
+@login_required
 def get_user(ending):
-    return user_gen();
-
+    return user_gen()
 
 #
 # login part
 #
 
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
+    if g.user is not None and g.user.is_authenticated:
+        return redirect(url_for('get_user'))
     return gh.authorize(callback=url_for('authorized', next=request.args.get('next'), _external=True))
+
+@gh.tokengetter
+def get_gh_oauth_token():
+    return session.get('github_token')
 
 
 @app.route('/logout')
 def logout():
-    session.pop('github_token', None)
+    logout_user()
+    session.clear()
     return redirect(url_for('index'))
 
 
@@ -108,14 +110,21 @@ def authorized():
         )
     #success
     session['github_token'] = (resp['access_token'], '')
-    Ins.gt = Github(login_or_token=resp['access_token'])
-    print(Ins.gt.get_user())
-    print(session['github_token'])
-    print(gh.get('user'))
+
+    str = resp['access_token']
+    user = getUserData(str)
+    login_user(user)
+    # Ins.gt = Github(login_or_token=session['github_token'][0])
+    #
+    # print(Ins.gt.get_user())
+    # print(session['github_token'])
+    # print(gh.get('user'))
     if request.args.get('next'):
         return redirect(request.args.get('next'))
     return redirect(url_for('index', next=request.args.get('next')))
 
-@gh.tokengetter
-def get_gh_oauth_token():
-    return session.get('github_token')
+@login_manager.user_loader
+def load_user(id):
+    if 'github_token' in session:
+        return getUserData(session['github_token'][0])
+    return User(id, None)
