@@ -1,7 +1,8 @@
 from flask import Flask
 from flask_bootstrap import Bootstrap
-from config import Config as c
 from flask_login import LoginManager
+
+from config import Config as c
 
 app = Flask(__name__)
 # app._static_folder = '/static'

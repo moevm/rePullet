@@ -1,5 +1,6 @@
-from github.PullRequest import PullRequest
 from github.Issue import Issue
+from github.PullRequest import PullRequest
+
 
 def count_rebuild(issue, pull):
     """
@@ -13,14 +14,15 @@ def count_rebuild(issue, pull):
     for comment in issuecomments:
         for commit in pullcommits:
             if startcomment.created_at < commit.commit.committer.date < comment.created_at:
-                rebuild += 1 #защитывается только одна доделка
+                rebuild += 1  # защитывается только одна доделка
                 break
         startcomment = comment
     for commit in pullcommits:
         if commit.commit.committer.date > startcomment.created_at:
-            rebuild+=1
+            rebuild += 1
             break
     return rebuild
+
 
 def countReport(pull):
     """
@@ -31,7 +33,7 @@ def countReport(pull):
     count = 0
     for fl in pull.get_files():
         if (fl.filename.endswith(".pdf")
-                or fl.filename.endswith(".doc")
-                or fl.filename.endswith(".docx")):
-            count+=1
+            or fl.filename.endswith(".doc")
+            or fl.filename.endswith(".docx")):
+            count += 1
     return count

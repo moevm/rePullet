@@ -1,17 +1,17 @@
-from flask import g
-
-import json
-from flask import jsonify
 import datetime
+import json
+
+from flask import g
+from flask import jsonify
+
 from rePullet.logic.pullstats import *
 
-from rePullet.logic import Ins
 
 def group_gen(urluser, urlrepo):
-    #a = urlpart.split('/')
-    #making github great again
+    # a = urlpart.split('/')
+    # making github great again
     userslist = []
-    for pull in g.user.ghI.get_repo(urluser+'/'+urlrepo).get_pulls('all'):
+    for pull in g.user.ghI.get_repo(urluser + '/' + urlrepo).get_pulls('all'):
         current_user = {'id': pull.user.login, 'content': pull.user.login}
         if current_user not in userslist:
             userslist.append(current_user)
@@ -23,7 +23,7 @@ def items_gen(urluser, urlrepo, params):
 
     repo = g.user.ghI.get_repo(urluser + '/' + urlrepo)
     for pull in repo.get_pulls('all'):
-        #проверяем, закрыт ли PR
+        # проверяем, закрыт ли PR
         issue = repo.get_issue(pull.number)
         if pull.state == 'closed':
             # получаем номер
@@ -32,7 +32,7 @@ def items_gen(urluser, urlrepo, params):
             # закрыт, смотрим автора закрытия
             if 'cl' in params:
                 if issue.closed_by.login != params['cl']:
-                    continue #не учитываем PR, закрытые не указанным пользователем
+                    continue  # не учитываем PR, закрытые не указанным пользователем
         # теперь узнаем количество доделок
         # сначала узнаем, нужно ли проверять на доделку
         rebuild = 0
@@ -59,15 +59,16 @@ def items_gen(urluser, urlrepo, params):
                               'report': report})
     return json.dumps(itemslist)
 
+
 def options_gen(urluser, urlrepo):
     options = {}
     datetimelist = []
     for pull in g.user.ghI.get_repo(urluser + '/' + urlrepo).get_pulls('all'):
         datetimelist.append(pull.created_at)
-    options['min'] = (min(datetimelist)-datetime.timedelta(days=50)).strftime('%Y-%m-%d %H:%M')
-    options['max'] = (datetime.datetime.now()+datetime.timedelta(days=50)).strftime('%Y-%m-%d %H:%M')
+    options['min'] = (min(datetimelist) - datetime.timedelta(days=50)).strftime('%Y-%m-%d %H:%M')
+    options['max'] = (datetime.datetime.now() + datetime.timedelta(days=50)).strftime('%Y-%m-%d %H:%M')
     options['zoomMin'] = 60000
-    options['zoomMax'] = (datetime.datetime.now()-min(datetimelist)).total_seconds() * 3000
+    options['zoomMax'] = (datetime.datetime.now() - min(datetimelist)).total_seconds() * 3000
     options['maxHeight'] = '550px'
     options['dataAttributes'] = ['rework', 'report']
     options['clickToUse'] = True

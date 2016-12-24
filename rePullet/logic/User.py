@@ -1,6 +1,5 @@
 from flask_login import UserMixin
 
-from github import Github
 
 class User(UserMixin):
     def __init__(self, id, ghI):

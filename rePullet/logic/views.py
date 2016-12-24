@@ -1,16 +1,10 @@
-from flask import redirect, render_template, request, session, url_for, g
-from flask_oauthlib.client import OAuth
+from flask import redirect, render_template, request, session, url_for
 from flask_login import login_required, login_user, logout_user, current_user
-from github import Github
+from flask_oauthlib.client import OAuth
 
-
-from rePullet.logic.User import User
-from rePullet.logic.gh import *
 from rePullet import app, login_manager
-from rePullet.logic import Ins
-
+from rePullet.logic.gh import *
 from rePullet.logic.jsongen import *
-
 
 oauth = OAuth()
 gh = oauth.remote_app(
@@ -24,7 +18,7 @@ gh = oauth.remote_app(
     access_token_method='POST',
     access_token_url='https://github.com/login/oauth/access_token',
     authorize_url='https://github.com/login/oauth/authorize',
-    app_key = 'GITHUB'
+    app_key='GITHUB'
 
 )
 
@@ -33,11 +27,13 @@ gh = oauth.remote_app(
 def before_request():
     g.user = current_user
 
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if g.user is None:
         print('hello')
     return render_template('index.html', user=g.user)
+
 
 @app.route('/dashboard', methods=['GET', 'POST'])
 @login_required
@@ -46,35 +42,39 @@ def go_dash():
         session['urlrepo'] = request.form.get('url')
         return redirect(url_for('go_dash'))
     if g.user is None:
-        return redirect(url_for('login', next=request.url), code=307) # POST = 307
+        return redirect(url_for('login', next=request.url), code=307)  # POST = 307
     return render_template('dashboard.html', ddd=session.get('urlrepo'))
 
-@app.route('/api/groups/<urluser>/<urlrepo>',defaults={'ending': None})
-@app.route('/api/groups/<urluser>/<urlrepo>/',defaults={'ending': None})
+
+@app.route('/api/groups/<urluser>/<urlrepo>', defaults={'ending': None})
+@app.route('/api/groups/<urluser>/<urlrepo>/', defaults={'ending': None})
 @app.route('/api/groups/<urluser>/<urlrepo>/<ending>')
-def get_groups(urluser,urlrepo,ending):
-    return group_gen(urluser,urlrepo)
+def get_groups(urluser, urlrepo, ending):
+    return group_gen(urluser, urlrepo)
 
-@app.route('/api/items/<urluser>/<urlrepo>',defaults={'ending': None})
-@app.route('/api/items/<urluser>/<urlrepo>/',defaults={'ending': None})
+
+@app.route('/api/items/<urluser>/<urlrepo>', defaults={'ending': None})
+@app.route('/api/items/<urluser>/<urlrepo>/', defaults={'ending': None})
 @app.route('/api/items/<urluser>/<urlrepo>/<ending>')
-def get_items(urluser,urlrepo,ending):
+def get_items(urluser, urlrepo, ending):
     params = request.args.to_dict()
-    return items_gen(urluser,urlrepo,params)
+    return items_gen(urluser, urlrepo, params)
 
 
-@app.route('/api/options/<urluser>/<urlrepo>',defaults={'ending': None})
-@app.route('/api/options/<urluser>/<urlrepo>/',defaults={'ending': None})
+@app.route('/api/options/<urluser>/<urlrepo>', defaults={'ending': None})
+@app.route('/api/options/<urluser>/<urlrepo>/', defaults={'ending': None})
 @app.route('/api/options/<urluser>/<urlrepo>/<ending>')
-def get_options(urluser,urlrepo,ending):
-    return options_gen(urluser,urlrepo)
+def get_options(urluser, urlrepo, ending):
+    return options_gen(urluser, urlrepo)
 
-@app.route('/api/user',defaults={'ending': None})
-@app.route('/api/user/',defaults={'ending': None})
+
+@app.route('/api/user', defaults={'ending': None})
+@app.route('/api/user/', defaults={'ending': None})
 @app.route('/api/user/<ending>')
 @login_required
 def get_user(ending):
     return user_gen()
+
 
 #
 # login part
@@ -86,6 +86,7 @@ def login():
     if g.user is not None and g.user.is_authenticated:
         return redirect(url_for('get_user'))
     return gh.authorize(callback=url_for('authorized', next=request.args.get('next'), _external=True))
+
 
 @gh.tokengetter
 def get_gh_oauth_token():
@@ -108,7 +109,7 @@ def authorized():
             request.args['error_description'],
             resp
         )
-    #success
+    # success
     session['github_token'] = (resp['access_token'], '')
 
     str = resp['access_token']
@@ -122,6 +123,7 @@ def authorized():
     if request.args.get('next'):
         return redirect(request.args.get('next'))
     return redirect(url_for('index', next=request.args.get('next')))
+
 
 @login_manager.user_loader
 def load_user(id):
