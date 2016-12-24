@@ -1,6 +1,6 @@
 from github import Github
 
-from rePullet.logic.User import User
+from rePullet.logic.user import User
 
 
 def getUserData(access_token):
