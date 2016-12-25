@@ -18,8 +18,11 @@ def group_gen(urluser, urlrepo):
     return json.dumps(userslist)
 
 
-def items_gen(urluser, urlrepo, params):
+def items_gen(urluser, urlrepo, params, request_data):
+    print(request_data)
+
     itemslist = []
+
 
     repo = g.user.ghI.get_repo(urluser + '/' + urlrepo)
     for pull in repo.get_pulls('all'):
@@ -84,6 +87,11 @@ def user_gen():
     #     return k
     # print(g.user.ghI.get_user().login)
     # return jsonify(g.user.ghI.get_user().login)
+
+
+def date_gen(request_data):
+    print(jsonify(request_data))
+    return jsonify(request_data)
 
 
 def noUser(user):

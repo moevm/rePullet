@@ -3,6 +3,7 @@ venv/
 rePullet_site.conf
 rePullet_wsgi.wsgi
 config.py
+dbtests.py
 run.py
 .gitignore
 __pycache__/

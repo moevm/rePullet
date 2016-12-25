@@ -211,6 +211,18 @@ background-color: #eee;
     padding-left: 52px;
 }
 
+.sidebar .nav-third-level li a {
+    padding-left: 52px;
+}
+
+.sidebar .nav-third-level .l-gr {
+    background-color: #eee;
+    padding-left: 52px;
+    height: 10px;
+    display:block; /* for use on default inline elements like span */
+    overflow: hidden;
+}
+
 @media(min-width:768px) {
     .sidebar {
         z-index: 1;

@@ -1,5 +1,6 @@
 $(document).ready(function() {
     getTimeline();
+    bindDatepicker();
 });
 
 function getLocationPathname(href) {
@@ -23,6 +24,7 @@ function getOptionsString() {
 function getTimeline() {
     document.getElementById("preview-text").innerHTML="Fetching repository information...";
     var groupsData, itemsData, optionsData;
+    var a = readDataranges();
     var url = document.getElementById("urlrepo").getAttribute('src');
     if(!url){
         document.getElementById("preview-text").innerHTML="NO DATA";
@@ -42,9 +44,22 @@ function getTimeline() {
             document.getElementById("preview-text").innerHTML=" Compiling timeline. " +
                 "This may take a couple of minutes while we slice & dice the data....";
         }),
-        $.getJSON('/api/items'+getLocationPathname(url)+optString, function (data) {
+        // $.getJSON('/api/items'+getLocationPathname(url)+optString, function (data) {
+        //     itemsData = data;
+        // }),
+        $.ajax({
+          url:'api/items'+getLocationPathname(url)+optString,
+          type:"POST",
+          data: a,
+          contentType:"application/json; charset=utf-8",
+          dataType:"json",
+          success: function(data){
             itemsData = data;
+          }
         })
+        // $.post('api/items'+getLocationPathname(url)+optString, a, function (data) {
+        //     itemsData = data;
+        // }, 'json')
     ).then(function () {
         if(groupsData && itemsData && optionsData){
             // DOM element where the Timeline will be attached
@@ -93,16 +108,89 @@ function getTimeline() {
     })
 }
 
-function insertRow(text1, text2) {
-    var tableRef = document.getElementById('prhint').getElementsByTagName('tbody')[0];
-    var newRow   = tableRef.insertRow(tableRef.rows.length);
-    var cell1 = newRow.insertCell(0);
-    var cell2 = newRow.insertCell(1);
-    cell1.innerHTML = text1;
-    cell2.innerHTML = text2;
+
+//
+// datetime range
+//
+var dateR =(function(time1, time2, del) {
+    var counter = 0;
+    function addNew(time1, time2, del) {
+        console.log(del);
+        if(del != undefined){
+            removeOne(del);
+        }
+        else{
+            counter += 1;
+            $("#dateUl").find('li:last').after(function () {
+                return '<li id="date'+counter+'li"><div class="div-gr"><div class="input-group input-daterange">' +
+                    '<input type="text" data-date-format="dd-mm-yyyy" class="form-control" value="'+time1+'">' +
+                    '<span class="input-group-addon">to</span>' +
+                    '<input type="text" data-date-format="dd-mm-yyyy" class="form-control" value="'+time2+'">' +
+                    '<span class="input-group-btn"><button id="date'+counter+'" class="btn btn-block" onclick="removeDaterange(this);">' +
+                    '<span class="glyphicon glyphicon-remove"></span></button></span></div></div></li>';
+            });
+        }
+    }
+    function removeOne(element) {
+        counter-=1;
+        var myid = element.id;
+        var selector = '#'+ myid +'li';
+        $("li").remove(selector);
+    }
+    return function (time1, time2, del) {
+        return addNew(time1, time2, del)
+    }
+})();
+
+
+function addNewDatarange(time1, time2) {
+    dateR(time1,time2);
+    bindDatepicker();
 }
 
+function removeDaterange(element) {
+    dateR(' ', ' ', element);
+}
 
-$('.input-daterange input').each(function() {
-    $(this).datepicker("clearDates");
-});
+function bindDatepicker() {
+    $('.input-daterange input').each(function() {
+        $(this).datepicker({
+            dateFormat: 'dd-mm-yy'
+        });
+    });
+}
+
+//
+// Timeline actions
+//
+
+function updateTimeline() {
+
+}
+
+function sendDataranges(){
+    getTimeline();
+}
+
+function readDataranges(){
+    var dataranges = {
+        a: []
+    };
+
+    var ul = document.getElementById("dateUl");
+    var items = ul.getElementsByTagName("li");
+    for (var i = 0; i < items.length; ++i) {
+        var item = items[i];
+        var inputs = item.getElementsByTagName("input");
+        if(inputs[0].value != '' && inputs[1].value != '') {
+            dataranges.a.push({
+                'id': item.id,
+                'start': inputs[0].value,
+                'end': inputs[1].value
+            });
+        }
+        // do something with items[i], which is a <li> element
+    }
+    //console.log(JSON.stringify(dataranges.a));
+    return JSON.stringify(dataranges.a);
+}
