@@ -194,3 +194,12 @@ function readDataranges(){
     //console.log(JSON.stringify(dataranges.a));
     return JSON.stringify(dataranges.a);
 }
+
+function insertRow(text1, text2) {
+    var tableRef = document.getElementById('prhint').getElementsByTagName('tbody')[0];
+    var newRow   = tableRef.insertRow(tableRef.rows.length);
+    var cell1 = newRow.insertCell(0);
+    var cell2 = newRow.insertCell(1);
+    cell1.innerHTML = text1;
+    cell2.innerHTML = text2;
+}

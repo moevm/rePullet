@@ -67,7 +67,7 @@ def options_gen(urluser, urlrepo):
     a = datetime.datetime.now() - datetime.timedelta(days=50)
     if datetimelist:
         a = min(datetimelist)
-    options['min'] = a.strftime('%Y-%m-%d %H:%M')
+    options['min'] = (a- datetime.timedelta(days=50)).strftime('%Y-%m-%d %H:%M')
     options['max'] = (datetime.datetime.now() + datetime.timedelta(days=50)).strftime('%Y-%m-%d %H:%M')
     options['zoomMin'] = 60000
     options['zoomMax'] = (datetime.datetime.now() - a).total_seconds() * 3000

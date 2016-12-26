@@ -20,7 +20,9 @@ def saveDates(jsondata, user, urluser, urlrepo):
         # и если ее не было, добавим
         #db_users.update_one({'gitId': user.id} , {'$push': {'repos': {'name': urluser+'/'+urlrepo, 'dates': jsondata}}})
 
-def loadDates()
+def loadDates():
+    pass
 
 def updateUserInfo(user):
-    db_users.update_one({'gitId': user.id}, {'$set': {'gitName': user.name, 'repos': []}}, upsert=True)
+    #db_users.update_one({'gitId': user.id}, {'$set': {'gitName': user.name, 'repos': []}}, upsert=True)
+    pass
