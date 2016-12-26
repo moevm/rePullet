@@ -4,7 +4,7 @@ import json
 from flask import g
 from flask import jsonify
 
-from rePullet.logic.pullstats import *
+from rePullet.logic.gh import *
 
 
 def group_gen(urluser, urlrepo):
@@ -18,12 +18,8 @@ def group_gen(urluser, urlrepo):
     return json.dumps(userslist)
 
 
-def items_gen(urluser, urlrepo, params, request_data):
-    print(request_data)
-
+def items_gen(urluser, urlrepo, params, request_data=None):
     itemslist = []
-
-
     repo = g.user.ghI.get_repo(urluser + '/' + urlrepo)
     for pull in repo.get_pulls('all'):
         # проверяем, закрыт ли PR
@@ -68,10 +64,13 @@ def options_gen(urluser, urlrepo):
     datetimelist = []
     for pull in g.user.ghI.get_repo(urluser + '/' + urlrepo).get_pulls('all'):
         datetimelist.append(pull.created_at)
-    options['min'] = (min(datetimelist) - datetime.timedelta(days=50)).strftime('%Y-%m-%d %H:%M')
+    a = datetime.datetime.now() - datetime.timedelta(days=50)
+    if datetimelist:
+        a = min(datetimelist)
+    options['min'] = a.strftime('%Y-%m-%d %H:%M')
     options['max'] = (datetime.datetime.now() + datetime.timedelta(days=50)).strftime('%Y-%m-%d %H:%M')
     options['zoomMin'] = 60000
-    options['zoomMax'] = (datetime.datetime.now() - min(datetimelist)).total_seconds() * 3000
+    options['zoomMax'] = (datetime.datetime.now() - a).total_seconds() * 3000
     options['maxHeight'] = '550px'
     options['dataAttributes'] = ['rework', 'report']
     options['clickToUse'] = True

@@ -1,4 +1,4 @@
-from flask import redirect, render_template, request, session, url_for
+from flask import redirect, render_template, request, session, url_for, abort
 from flask_login import login_required, login_user, logout_user, current_user
 from flask_oauthlib.client import OAuth
 import pymongo
@@ -6,7 +6,7 @@ from rePullet import app, login_manager
 from rePullet.logic.gh import *
 from rePullet.logic.jsongen import *
 from rePullet.logic import db, db_deadline, db_users
-
+from rePullet.logic.dbcore import *
 
 oauth = OAuth()
 gh = oauth.remote_app(
@@ -58,9 +58,15 @@ def get_groups(urluser, urlrepo, ending):
 @app.route('/api/items/<urluser>/<urlrepo>/', defaults={'ending': None}, methods=['GET', 'POST'])
 @app.route('/api/items/<urluser>/<urlrepo>/<ending>', methods=['GET', 'POST'])
 def get_items(urluser, urlrepo, ending):
+    if not urluser or not urlrepo:
+        abort(404)
     params = request.args.to_dict()
     request_data = request.get_json()
-    print(request_data)
+    #print(request_data)
+    if (g.user is not None
+       and g.user.is_authenticated
+       and request_data):
+        saveDates(request_data, g.user, urluser, urlrepo)
     return items_gen(urluser, urlrepo, params, request_data)
 
 
@@ -76,6 +82,7 @@ def get_options(urluser, urlrepo, ending):
 @app.route('/api/user/<ending>')
 @login_required
 def get_user(ending):
+    #saveDates(None, g.user, 'G0DZ', 'TPR')
     return user_gen()
 
 #
@@ -116,7 +123,7 @@ def authorized():
 
     str = resp['access_token']
     user = getUserData(str)
-    db_users.update_one({'gitId': user.id}, { '$set': {'gitName': user.name}}, upsert=True)
+    updateUserInfo(user)
     login_user(user)
     # Ins.gt = Github(login_or_token=session['github_token'][0])
     #
