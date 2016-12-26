@@ -22,17 +22,17 @@ function getOptionsString() {
 }
 
 function getTimeline() {
-    document.getElementById("preview-text").innerHTML="Fetching repository information...";
-    var groupsData, itemsData, optionsData;
-    var a = readDataranges();
-    var url = document.getElementById("urlrepo").getAttribute('src');
     if(!url){
-        document.getElementById("preview-text").innerHTML="NO DATA";
+        console.log('no data!');
         return
     }
-    document.getElementById("preview-text").innerHTML=" Fetching pull requests data...";
+    document.getElementById("preview-text").innerHTML="Fetching repository information...";
+    hideControlElements();
+    var groupsData, itemsData, optionsData;
+    var a = readDataranges();
     var optString = getOptionsString();
-    //document.getElementById("repo").value = 'api/groups' + getLocationPathname(url);
+    var url = document.getElementById("urlrepo").getAttribute('src');
+    document.getElementById("preview-text").innerHTML=" Fetching pull requests data...";
     $.when(
         $.getJSON('/api/groups'+getLocationPathname(url)+optString, function (data) {
             groupsData = data;
@@ -44,9 +44,6 @@ function getTimeline() {
             document.getElementById("preview-text").innerHTML=" Compiling timeline. " +
                 "This may take a couple of minutes while we slice & dice the data....";
         }),
-        // $.getJSON('/api/items'+getLocationPathname(url)+optString, function (data) {
-        //     itemsData = data;
-        // }),
         $.ajax({
           url:'api/items'+getLocationPathname(url)+optString,
           type:"POST",
@@ -57,9 +54,6 @@ function getTimeline() {
             itemsData = data;
           }
         })
-        // $.post('api/items'+getLocationPathname(url)+optString, a, function (data) {
-        //     itemsData = data;
-        // }, 'json')
     ).then(function () {
         if(groupsData && itemsData && optionsData){
             // DOM element where the Timeline will be attached
@@ -72,11 +66,9 @@ function getTimeline() {
             timeline.setOptions(optionsData);
             timeline.setItems(items);
             timeline.setGroups(groups);
-            document.getElementById("main-content").style.display = 'block';
-            document.getElementById("vis-content").style.display = 'block';
-            document.getElementById("preview-container").style.display = 'none';
-            document.getElementById("preview-text").style.display = 'none';
-            document.getElementById("preview-loading").style.display = 'none';
+
+            showControlElements();
+
             timeline.on('select', function (properties) {
               logEvent(properties);
             });
@@ -101,9 +93,6 @@ function getTimeline() {
                   document.getElementById('prhint').style.display = 'none';
               }
             }
-        }
-        else{
-            document.getElementById("preview-text").innerHTML="NO DATA";
         }
     })
 }
@@ -202,4 +191,28 @@ function insertRow(text1, text2) {
     var cell2 = newRow.insertCell(1);
     cell1.innerHTML = text1;
     cell2.innerHTML = text2;
+}
+
+
+//
+// visible actions
+//
+
+function hideControlElements(){
+    document.getElementById('sideControl').style.display = 'none';
+    if (window.matchMedia("(min-width: 768px)").matches) {
+      document.getElementById('page-wrapper').style.marginLeft = '0px';
+    }
+}
+
+function showControlElements() {
+    if (window.matchMedia("(min-width: 768px)").matches) {
+      document.getElementById('page-wrapper').style.marginLeft = '300px';
+    }
+    document.getElementById('sideControl').style.display = 'block';
+    document.getElementById("main-content").style.display = 'block';
+    document.getElementById("vis-content").style.display = 'block';
+    document.getElementById("preview-container").style.display = 'none';
+    document.getElementById("preview-text").style.display = 'none';
+    document.getElementById("preview-loading").style.display = 'none';
 }
