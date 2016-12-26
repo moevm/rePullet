@@ -62,10 +62,8 @@ def get_items(urluser, urlrepo, ending):
         abort(404)
     params = request.args.to_dict()
     request_data = request.get_json()
-    #print(request_data)
     if (g.user is not None
-       and g.user.is_authenticated
-       and request_data):
+       and g.user.is_authenticated):
         saveDates(request_data, g.user, urluser, urlrepo)
     return items_gen(urluser, urlrepo, params, request_data)
 

@@ -2,7 +2,8 @@ from rePullet.logic import db, db_deadline, db_users
 
 
 def saveDates(jsondata, user, urluser, urlrepo):
-    print(jsondata)
+    if not jsondata:
+        jsondata = []
     #начинаем с записи о репозитории
     #смотрим, есть ли запись
     doc = db_users.find_one({'gitId': user.id})
@@ -13,13 +14,13 @@ def saveDates(jsondata, user, urluser, urlrepo):
         # записи были, ищем нашу
         doc = db_users.find_one_and_update({'gitId': user.id, 'repos.name': urluser+'/'+urlrepo},{'$set':{'repos.$.dates': jsondata}})
         if not doc:
-            db_users.find_one_and_update({'gitId': user.id},{'$push': {'repos': [{'name': urluser + '/' + urlrepo, 'dates': jsondata}]}})
+            db_users.find_one_and_update({'gitId': user.id},{'$addToSet': {'repos': [{'name': urluser + '/' + urlrepo, 'dates': jsondata}]}})
         #doc['repos']['dates'] = jsondata
         #db_users.update_one
         # и если ее не было, добавим
         #db_users.update_one({'gitId': user.id} , {'$push': {'repos': {'name': urluser+'/'+urlrepo, 'dates': jsondata}}})
 
-
+def loadDates()
 
 def updateUserInfo(user):
     db_users.update_one({'gitId': user.id}, {'$set': {'gitName': user.name, 'repos': []}}, upsert=True)
