@@ -36,6 +36,8 @@ def index():
     return render_template('index.html', user=g.user)
 
 
+
+
 @app.route('/dashboard', methods=['GET', 'POST'])
 def go_dash():
     if request.form.get('url'):
