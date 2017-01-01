@@ -59,13 +59,11 @@ def get_groups(urluser, urlrepo, ending):
 @app.route('/api/items/<urluser>/<urlrepo>/', defaults={'ending': None}, methods=['GET', 'POST'])
 @app.route('/api/items/<urluser>/<urlrepo>/<ending>', methods=['GET', 'POST'])
 def get_items(urluser, urlrepo, ending):
-    if not urluser or not urlrepo:
-        abort(404)
     params = request.args.to_dict()
     request_data = request.get_json()
-    #if (g.user is not None
-       #and g.user.is_authenticated):
-        #saveDates(request_data, g.user, urluser, urlrepo)
+    if (g.user is not None
+       and g.user.is_authenticated):
+        saveDates(request_data, g.user, urluser, urlrepo)
     return items_gen(urluser, urlrepo, params, request_data)
 
 
@@ -122,7 +120,7 @@ def authorized():
 
     str = resp['access_token']
     user = getUserData(str)
-    #updateUserInfo(user)
+    updateUserInfo(user)
     login_user(user)
     # Ins.gt = Github(login_or_token=session['github_token'][0])
     #
