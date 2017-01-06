@@ -1,12 +1,10 @@
-from flask import redirect, render_template, request, session, url_for, abort
+from flask import redirect, render_template, request, session, url_for
 from flask_login import login_required, login_user, logout_user, current_user
 from flask_oauthlib.client import OAuth
-import pymongo
+
 from rePullet import app, login_manager
-from rePullet.logic.gh import *
-from rePullet.logic.jsongen import *
-from rePullet.logic import db, db_deadline, db_users
 from rePullet.logic.dbcore import *
+from rePullet.logic.jsongen import *
 
 oauth = OAuth()
 gh = oauth.remote_app(
@@ -36,8 +34,6 @@ def index():
     return render_template('index.html', user=g.user)
 
 
-
-
 @app.route('/dashboard', methods=['GET', 'POST'])
 def go_dash():
     if request.form.get('url'):
@@ -45,6 +41,8 @@ def go_dash():
         return redirect(url_for('go_dash'))
     if g.user is None or not g.user.is_authenticated:
         return redirect(url_for('login', next=request.url), code=307)  # POST = 307
+    #if is_repo_owner(session['urlrepo'], g.user):
+    #    print('success!')
     return render_template('dashboard.html', ddd=session.get('urlrepo'), user=g.user)
 
 
@@ -62,7 +60,7 @@ def get_items(urluser, urlrepo, ending):
     params = request.args.to_dict()
     request_data = request.get_json()
     if (g.user is not None
-       and g.user.is_authenticated):
+        and g.user.is_authenticated):
         saveDates(request_data, g.user, urluser, urlrepo)
     return items_gen(urluser, urlrepo, params, request_data)
 
@@ -79,8 +77,9 @@ def get_options(urluser, urlrepo, ending):
 @app.route('/api/user/<ending>')
 @login_required
 def get_user(ending):
-    #saveDates(None, g.user, 'G0DZ', 'TPR')
+    # saveDates(None, g.user, 'G0DZ', 'TPR')
     return user_gen()
+
 
 #
 # login part

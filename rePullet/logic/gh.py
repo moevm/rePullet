@@ -1,6 +1,8 @@
 from github.Issue import Issue
 from github.PullRequest import PullRequest
 from github import Github
+from urllib.parse import urlparse
+import os.path
 
 from rePullet.logic.user import User
 
@@ -47,3 +49,11 @@ def getUserData(access_token):
     userId = user.id
     name = user.login
     return User(userId, ghI, name)
+
+def is_repo_owner(urlstr, user):
+    path = urlparse(urlstr).path
+    os.path.split(path)
+    while os.path.dirname(path) != '/':
+        path = os.path.dirname(path)
+    name = path[1:]
+    return True if user.name == name else False

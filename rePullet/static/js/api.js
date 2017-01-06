@@ -22,10 +22,10 @@ function getOptionsString() {
 }
 
 function getTimeline() {
-    if(!url){
-        console.log('no data!');
-        return
-    }
+    // if(!url){
+    //     console.log('no data!');
+    //     return
+    // }
     document.getElementById("preview-text").innerHTML="Fetching repository information...";
     hideControlElements();
     var groupsData, itemsData, optionsData;
@@ -104,7 +104,7 @@ function getTimeline() {
 var dateR =(function(time1, time2, del) {
     var counter = 0;
     function addNew(time1, time2, del) {
-        console.log(del);
+        //если идет параметр на удаление, удаляем
         if(del != undefined){
             removeOne(del);
         }
@@ -168,7 +168,7 @@ function readDataranges(){
 
     var ul = document.getElementById("dateUl");
     var items = ul.getElementsByTagName("li");
-    for (var i = 0; i < items.length; ++i) {
+    for (var i = 1; i < items.length; ++i) {
         var item = items[i];
         var inputs = item.getElementsByTagName("input");
         if(inputs[0].value != '' && inputs[1].value != '') {
