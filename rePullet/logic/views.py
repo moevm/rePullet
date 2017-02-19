@@ -3,8 +3,8 @@ from flask_login import login_required, login_user, logout_user, current_user
 from flask_oauthlib.client import OAuth
 
 from rePullet import app, login_manager
-from rePullet.logic.dbcore import *
-from rePullet.logic.jsongen import *
+import rePullet.logic.dbcore as db
+from rePullet.logic.ghjson import *
 
 oauth = OAuth()
 gh = oauth.remote_app(
@@ -29,21 +29,51 @@ def before_request():
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    if g.user is not None and g.user.is_authenticated:
+        return render_template('new.html', user=g.user)
+    else:
+        return render_template('new.html', user=None)
+
+
+
+@app.route('/old', methods=['GET', 'POST'])
+def old():
     if g.user is None:
         print('hello')
     return render_template('index.html', user=g.user)
 
 
-@app.route('/dashboard', methods=['GET', 'POST'])
-def go_dash():
+#
+# dashboard group
+#
+@app.route('/dashboard', defaults={'ending': None}, methods=['GET', 'POST'])
+@app.route('/dashboard/', defaults={'ending': None}, methods=['GET', 'POST'])
+@app.route('/dashboard/<ending>', methods=['GET', 'POST'])
+@login_required
+def go_dash(ending):
+    return render_template('dashboard.html', user=g.user, path=ending)
+
+@app.route('/preview', methods=['GET', 'POST'])
+@login_required
+def go_preview():
+    # TODO: redirect without error window
+    if request.form.get('repoid'):
+        session['repoid'] = request.form.get('repoid')
+        return redirect(url_for('go_preview', ending=None))
+    return render_template('dashboard.html', user=g.user, path='preview')
+
+
+@app.route('/olddashboard', methods=['GET', 'POST'])
+@login_required
+def old_dash():
     if request.form.get('url'):
         session['urlrepo'] = request.form.get('url')
-        return redirect(url_for('go_dash'))
+        return redirect(url_for('go_dash', ending=None))
     if g.user is None or not g.user.is_authenticated:
         return redirect(url_for('login', next=request.url), code=307)  # POST = 307
     #if is_repo_owner(session['urlrepo'], g.user):
     #    print('success!')
-    return render_template('dashboard.html', ddd=session.get('urlrepo'), user=g.user)
+    return render_template('olddashboard.html', ddd=session.get('urlrepo'), user=g.user)
 
 
 @app.route('/api/groups/<urluser>/<urlrepo>', defaults={'ending': None})
@@ -61,7 +91,7 @@ def get_items(urluser, urlrepo, ending):
     request_data = request.get_json()
     if (g.user is not None
         and g.user.is_authenticated):
-        saveDates(request_data, g.user, urluser, urlrepo)
+        db.saveDates(request_data, g.user, urluser, urlrepo)
     return items_gen(urluser, urlrepo, params, request_data)
 
 
@@ -81,6 +111,21 @@ def get_user(ending):
     return user_gen()
 
 
+@app.route('/api/addrepo', methods=['POST'])
+@login_required
+def post_addrepo():
+    # TODO: Method not allowed
+    if request.form.get('url'):
+        # добавляем репозиторий к отслеживаемым
+        db.addToTrack(request.form.get('url'), g.user)
+        return redirect(url_for('go_dash', ending=None))
+    return redirect(url_for('go_dash', ending=None))
+
+
+@app.route('/api/user/repos', methods=['GET'])
+def get_userrepo():
+    return userrepos_json(g.user)
+
 #
 # login part
 #
@@ -89,7 +134,7 @@ def get_user(ending):
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if g.user is not None and g.user.is_authenticated:
-        return redirect(url_for('get_user'))
+        return redirect(url_for('go_dash', ending=None))
     return gh.authorize(callback=url_for('authorized', next=request.args.get('next'), _external=True))
 
 
@@ -115,24 +160,21 @@ def authorized():
             resp
         )
     # success
-    session['github_token'] = (resp['access_token'], '')
-
+    #sss = (resp['access_token'], '')
     str = resp['access_token']
+    session['github_token'] = str
     user = getUserData(str)
-    updateUserInfo(user)
+    db.updateUserInfo(user)
     login_user(user)
-    # Ins.gt = Github(login_or_token=session['github_token'][0])
-    #
-    # print(Ins.gt.get_user())
-    # print(session['github_token'])
-    # print(gh.get('user'))
-    if request.args.get('next'):
-        return redirect(request.args.get('next'))
-    return redirect(url_for('index', next=request.args.get('next')))
-
+    #if request.args.get('next'):
+    #    return redirect(request.args.get('next'))
+    #return redirect(url_for('index', next=request.args.get('next')))
+    return redirect(url_for('go_dash', ending=None))
 
 @login_manager.user_loader
 def load_user(id):
     if 'github_token' in session:
-        return getUserData(session['github_token'][0])
-    return User(id, None, None)
+        return getUserData(session['github_token'])
+    return User(id, None, None, None)
+
+
