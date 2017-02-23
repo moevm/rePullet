@@ -51,16 +51,38 @@ def old():
 @app.route('/dashboard/<ending>', methods=['GET', 'POST'])
 @login_required
 def go_dash(ending):
+    """
+    :param ending:
+     None = table
+     new = add
+     preview = ????
+    :return:
+    """
     return render_template('dashboard.html', user=g.user, path=ending)
+#
+# @app.route('/preview', methods=['GET', 'POST'])
+# @login_required
+# def go_preview():
+#     # TODO: redirect without error window
+#     if request.form.get('repoid'):
+#         session['repoid'] = request.form.get('repoid')
+#         return redirect(url_for('go_preview', ending=None))
+#     return render_template('dashboard.html', user=g.user, path='preview')
 
-@app.route('/preview', methods=['GET', 'POST'])
+
+@app.route('/view/', defaults={'ending': None}, methods=['GET'])
+@app.route('/view/<path:ending>', methods=['GET'])
 @login_required
-def go_preview():
-    # TODO: redirect without error window
-    if request.form.get('repoid'):
-        session['repoid'] = request.form.get('repoid')
-        return redirect(url_for('go_preview', ending=None))
-    return render_template('dashboard.html', user=g.user, path='preview')
+def go_view(ending):
+    #TODO: complete this function
+    print(ending)
+    repoid = ending
+    if repoid is None:
+        return redirect(url_for('go_dash', ending=None))
+    #print(repoid)
+    return render_template('dashboard.html', user=g.user, path='view', r=repoid)
+
+
 
 
 @app.route('/olddashboard', methods=['GET', 'POST'])
@@ -88,11 +110,11 @@ def get_groups(urluser, urlrepo, ending):
 @app.route('/api/items/<urluser>/<urlrepo>/<ending>', methods=['GET', 'POST'])
 def get_items(urluser, urlrepo, ending):
     params = request.args.to_dict()
-    request_data = request.get_json()
-    if (g.user is not None
-        and g.user.is_authenticated):
-        db.saveDates(request_data, g.user, urluser, urlrepo)
-    return items_gen(urluser, urlrepo, params, request_data)
+    # request_data = request.get_json()
+    # if (g.user is not None
+    #     and g.user.is_authenticated):
+    #     db.saveDates(request_data, g.user, urluser, urlrepo)
+    return items_gen(urluser, urlrepo, params)
 
 
 @app.route('/api/options/<urluser>/<urlrepo>', defaults={'ending': None})
@@ -170,6 +192,7 @@ def authorized():
     #    return redirect(request.args.get('next'))
     #return redirect(url_for('index', next=request.args.get('next')))
     return redirect(url_for('go_dash', ending=None))
+
 
 @login_manager.user_loader
 def load_user(id):

@@ -1,3 +1,4 @@
+import github
 from github.Issue import Issue
 from github.PullRequest import PullRequest
 from github import Github
@@ -6,6 +7,7 @@ import os.path
 
 from rePullet.logic.user import User
 
+#github.enable_console_debug_logging()
 
 def count_rebuild(issue, pull):
     """
@@ -13,19 +15,20 @@ def count_rebuild(issue, pull):
     @type pull: PullRequest
     """
     rebuild = 0
-    issuecomments = issue.get_comments()
-    pullcommits = pull.get_commits()
-    startcomment = issuecomments[0]
-    for comment in issuecomments:
+    if pull.comments != 0:
+        issuecomments = issue.get_comments()
+        pullcommits = pull.get_commits()
+        startcomment = issuecomments[0]
+        for comment in issuecomments:
+            for commit in pullcommits:
+                if startcomment.created_at < commit.commit.committer.date < comment.created_at:
+                    rebuild += 1  # защитывается только одна доделка
+                    break
+            startcomment = comment
         for commit in pullcommits:
-            if startcomment.created_at < commit.commit.committer.date < comment.created_at:
-                rebuild += 1  # защитывается только одна доделка
+            if commit.commit.committer.date > startcomment.created_at:
+                rebuild += 1
                 break
-        startcomment = comment
-    for commit in pullcommits:
-        if commit.commit.committer.date > startcomment.created_at:
-            rebuild += 1
-            break
     return rebuild
 
 
@@ -44,12 +47,16 @@ def countReport(pull):
     return count
 
 def getUserData(access_token):
-    ghI = Github(login_or_token=access_token)
-    user = ghI.get_user()
-    name = user.login
-    avatar = user.avatar_url
-    userid = user.id
-    return User(userid, ghI, name, avatar)
+    try:
+        ghI = Github(login_or_token=access_token, timeout=15)
+        user = ghI.get_user()
+        print(user)
+        name = user.login
+        avatar = user.avatar_url
+        userid = user.id
+        return User(userid, ghI, name, avatar)
+    except github.GithubException:
+        print('lol')
 
 def is_repo_owner(urlstr, user):
     path = urlparse(urlstr).path

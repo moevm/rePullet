@@ -14,7 +14,7 @@ function getUserRepos() {
             console.log(reposData[k]['id']);
             (function(e) {
                 $("#repoTBody").find('tr:last').after(function () {
-                    return '<tr class="unread checked clickable-row" data-repo="'+reposData[e]['id']+'">' +
+                    return '<tr class="unread checked clickable-row" data-repo="'+reposData[e]['fullname']+'">' +
                         '<td class="hidden-xs"><input type="checkbox" class="checkbox"></td>' +
                         '<td class="hidden-xs"><i class="fa fa-star icon-state-warning"></i></td>' +
                         '<td class="hidden-xs">id</td>' +
@@ -26,8 +26,8 @@ function getUserRepos() {
             })(k);
         }
         $(".clickable-row").click(function() {
-            //window.location.assign('/view?')
-            post('/view', {'repoid': $(this).data("repo")})
+            window.location.assign('/view/'+$(this).data("repo"));
+            //post('/view', {'r': $(this).data("repo")}, 'get')
         });
     })
 }

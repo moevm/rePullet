@@ -1,0 +1,73 @@
+<div id="page-wrapper">
+    <embed id='repoid' src="{{ r }}" hidden="true"></embed>
+    <div id="loading-wrapper" class="graphs">
+        <div class="error-main">
+            <img src="{{ url_for('static', filename='img/loading-bars.svg') }}" width="64" height="64" />
+            <h1 id="loading-text" class="h1 mt2 mb0">Fetching repository information...</h1>
+            <p class="small mb2">This could take a while</p>
+        </div>
+    </div>
+    <div id="content-wrapper" class="graphs" style="display: none">
+            <h3 class="blank1">Repository Info</h3>
+            <div class="col-lg-8">
+                <div class="Compose-Message">
+                    <div class="panel panel-default" style="margin:2em 0 0 0;">
+                        <div class="panel-heading" style="cursor: inherit">
+                            PR timeline
+                        </div>
+{#                        <div class="panel-body no-padding">#}
+                            <div id="visualization"></div>
+{#                        </div>#}
+                   </div>
+                </div>
+            </div>
+        <div class="col-lg-4">
+            <div class="Compose-Message">
+            <div class="panel panel-default" style="margin:2em 0 0 0;">
+                <div class="panel-heading" style="cursor: inherit">
+                    <i class="fa fa-tasks fa-fw"></i> Pull Request Info
+                </div>
+            <table id="prinfo" class="table table-bordered table-hover table-striped trr">
+                <thead>
+                    <tr>
+                        <th>Property</th>
+                        <th>Value</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tbody>
+                        <tr>
+                            <td>Title</td>
+                            <td>Lab2 branch</td>
+                        </tr>
+                        <tr>
+                            <td>Author</td>
+                            <td>0apm</td>
+                        </tr>
+                        <tr>
+                            <td>Created at</td>
+                            <td>2016-12-14 15:36</td>
+                        </tr>
+                        <tr>
+                            <td>Status</td>
+                            <td>closed</td>
+                        </tr>
+                        <tr>
+                            <td>Closed at</td>
+                            <td>2016-12-17 13:44</td>
+                        </tr>
+                        <tr>
+                            <td>Rework</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td>Report</td>
+                            <td>0</td>
+                        </tr>
+                    </tbody>
+            </table>
+        </div>
+    </div>
+            </div>
+    </div>
+</div>
