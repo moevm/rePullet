@@ -5,6 +5,7 @@ from flask_login import LoginManager
 from config import Config as c
 
 app = Flask(__name__)
+#app.url_map.strict_slashes = False
 # app._static_folder = '/static'
 app.config['SECRET_KEY'] = c.SECRET_KEY
 app.config['GITHUB'] = {

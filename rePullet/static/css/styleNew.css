@@ -117,7 +117,7 @@ a:hover {
 }
 .navbar-default a {
   color: #ccc;
-  font-size: 16px;
+  /*font-size: 16px;*/
 }
 .navbar-default .navbar-nav > li > a {
   padding-top: 10px;

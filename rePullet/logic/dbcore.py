@@ -51,6 +51,7 @@ def addToTrack(urlstr, user):
             #запись была, ищем нашу
             db_users.find_one_and_update({'gitId': user.id}, {'$addToSet': {'repos': {'id': repoid}}})
             #print(db_users.find_one({'gitId': user.id, 'repos': {'$in': [{'id': repoid}]}}))
+        return gh.getRepoNameById(user, repoid)
 
 
 def getuserrepos(user):

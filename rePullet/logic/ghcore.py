@@ -50,7 +50,7 @@ def getUserData(access_token):
     try:
         ghI = Github(login_or_token=access_token, timeout=15)
         user = ghI.get_user()
-        print(user)
+        #print(user)
         name = user.login
         avatar = user.avatar_url
         userid = user.id
@@ -78,3 +78,12 @@ def getrepoid(user, url):
     if repo:
         return repo.id
     return None
+
+
+def getRepoNameById(user, id):
+    try:
+        return user.ghI.get_repo(id).full_name
+    except github.GithubException:
+        return None
+
+

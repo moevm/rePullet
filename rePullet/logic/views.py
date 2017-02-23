@@ -30,25 +30,23 @@ def before_request():
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if g.user is not None and g.user.is_authenticated:
-        return render_template('new.html', user=g.user)
+        return render_template('index.html', user=g.user)
     else:
-        return render_template('new.html', user=None)
+        return render_template('index.html', user=None)
 
 
-
-@app.route('/old', methods=['GET', 'POST'])
-def old():
-    if g.user is None:
-        print('hello')
-    return render_template('index.html', user=g.user)
-
+@app.route('/guide', methods=['GET', 'POST'])
+def guide():
+    return render_template('index.html', user=None)
 
 #
 # dashboard group
 #
+
+
 @app.route('/dashboard', defaults={'ending': None}, methods=['GET', 'POST'])
-@app.route('/dashboard/', defaults={'ending': None}, methods=['GET', 'POST'])
-@app.route('/dashboard/<ending>', methods=['GET', 'POST'])
+#@app.route('/dashboard/', defaults={'ending': None}, methods=['GET', 'POST']) # trailing slash, BITCH
+@app.route('/dashboard/<path:ending>', methods=['GET', 'POST'])
 @login_required
 def go_dash(ending):
     """
@@ -58,6 +56,15 @@ def go_dash(ending):
      preview = ????
     :return:
     """
+    # if request.method == 'POST':
+    #     print('that')
+    # else:
+    #     print('lol')
+    if request.form.get('url'): #переход по репозиторию с главной страницы
+        print('this')
+        repo_name = db.addToTrack(request.form.get('url'), g.user) #добавление репозитория в список отслеживаемых
+        #db.printdb()
+        return redirect(url_for('go_view', ending=repo_name))
     return render_template('dashboard.html', user=g.user, path=ending)
 #
 # @app.route('/preview', methods=['GET', 'POST'])
