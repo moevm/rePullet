@@ -9,6 +9,5 @@ rePullet/logic/__pycache__/
 commands.txt
 rePullet.conf
 rePullet.wsgi
-dbtests.py
 dbclear.py
 lab4.py
