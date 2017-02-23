@@ -1,11 +1,14 @@
 venv/
 .idea/
-rePullet_site.conf
-rePullet_wsgi.wsgi
 config.py
 dbtests.py
-run.py
 .gitignore
 __pycache__/
 rePullet/__pycache__/
 rePullet/logic/__pycache__/
+commands.txt
+rePullet.conf
+rePullet.wsgi
+dbtests.py
+dbclear.py
+lab4.py
