@@ -1,8 +1,8 @@
-from rePullet.logic import db, db_deadline, db_users
-from rePullet.logic.user import User
-from urllib.parse import urlparse
-import os.path
+import pprint
+
 import rePullet.logic.ghcore as gh
+from rePullet.logic import db, db_users
+
 
 def saveDates(jsondata, user, urluser, urlrepo):
     if not jsondata:
@@ -49,6 +49,7 @@ def addToTrack(urlstr, user):
             db_users.find_one_and_update({'gitId': user.id}, {'$set': {'repos': [{'id': repoid}]}})
         else:
             #запись была, ищем нашу
+            #TODO: не добавлять, если уже есть
             db_users.find_one_and_update({'gitId': user.id}, {'$addToSet': {'repos': {'id': repoid}}})
             #print(db_users.find_one({'gitId': user.id, 'repos': {'$in': [{'id': repoid}]}}))
         return gh.getRepoNameById(user, repoid)
@@ -61,3 +62,9 @@ def getuserrepos(user):
     """
     doc = updateUserInfo(user)  # получаем пользователя
     return doc['repos'] if doc else [{}]
+
+def printdb():
+    for c in db.collection_names():
+        print(c)
+        for doc in db[c].find():
+            pprint.pprint(doc)

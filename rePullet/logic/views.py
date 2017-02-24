@@ -3,7 +3,6 @@ from flask_login import login_required, login_user, logout_user, current_user
 from flask_oauthlib.client import OAuth
 
 from rePullet import app, login_manager
-import rePullet.logic.dbcore as db
 from rePullet.logic.ghjson import *
 
 oauth = OAuth()
@@ -56,13 +55,15 @@ def go_dash(ending):
      preview = ????
     :return:
     """
-    # if request.method == 'POST':
-    #     print('that')
-    # else:
-    #     print('lol')
+    url = ''
+    if session.get('url'):
+        url = session['url']
+        session.pop('url', None)
     if request.form.get('url'): #переход по репозиторию с главной страницы
-        print('this')
-        repo_name = db.addToTrack(request.form.get('url'), g.user) #добавление репозитория в список отслеживаемых
+        url = request.form.get('url')
+    if url != '':
+        #print(url)
+        repo_name = db.addToTrack(url, g.user) #добавление репозитория в список отслеживаемых
         #db.printdb()
         return redirect(url_for('go_view', ending=repo_name))
     return render_template('dashboard.html', user=g.user, path=ending)
@@ -195,8 +196,10 @@ def authorized():
     user = getUserData(str)
     db.updateUserInfo(user)
     login_user(user)
-    #if request.args.get('next'):
-    #    return redirect(request.args.get('next'))
+    # if request.args.get('next'):
+    #     print(request.args.get('next'))
+    #     print(request.args.get('url'))
+    # #    return redirect(request.args.get('next'))
     #return redirect(url_for('index', next=request.args.get('next')))
     return redirect(url_for('go_dash', ending=None))
 
@@ -207,4 +210,8 @@ def load_user(id):
         return getUserData(session['github_token'])
     return User(id, None, None, None)
 
-
+@login_manager.unauthorized_handler
+def unauthorized():
+    if request.form.get('url'):
+        session['url'] = request.form.get('url')
+    return redirect(url_for('login', next=request.endpoint))
