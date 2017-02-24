@@ -29,9 +29,9 @@
  <!-- Meters graphs -->
 <script src="{{ url_for('static', filename='js/jquery-3.1.1.js') }}"></script>
 <!-- Placed js at the end of the document so the pages load faster -->
-    {% if path == 'view' %}
-            {% include 'dash/path/viewheader.html' %}
-        {% endif %}
+{% if path == 'view' %}
+{% include 'dash/path/viewheader.html' %}
+{% endif %}
 </head>
     <body class="sticky-header left-side-collapsed">
         <section>
@@ -41,7 +41,7 @@
 
             <!-- main content start-->
             {% if path == 'view' %}
-                <div class="view-main-content">
+                <div class="view-main-content main-content4">
             {% else %}
                 <div class="main-content">
             {% endif %}

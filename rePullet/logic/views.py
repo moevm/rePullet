@@ -78,12 +78,11 @@ def go_dash(ending):
 #     return render_template('dashboard.html', user=g.user, path='preview')
 
 
-@app.route('/view/', defaults={'ending': None}, methods=['GET'])
+@app.route('/view', defaults={'ending': None}, methods=['GET'])
 @app.route('/view/<path:ending>', methods=['GET'])
 @login_required
 def go_view(ending):
-    #TODO: complete this function
-    print(ending)
+    #print(ending)
     repoid = ending
     if repoid is None:
         return redirect(url_for('go_dash', ending=None))

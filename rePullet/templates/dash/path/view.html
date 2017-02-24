@@ -11,7 +11,7 @@
             <h3 class="blank1">Repository Info</h3>
             <div class="col-lg-8">
                 <div class="Compose-Message">
-                    <div class="panel panel-default" style="margin:2em 0 0 0;">
+                    <div class="panel panel-default" style="margin:1em 0 0 0;">
                         <div class="panel-heading" style="cursor: inherit">
                             PR timeline
                         </div>
@@ -23,11 +23,11 @@
             </div>
         <div class="col-lg-4">
             <div class="Compose-Message">
-            <div class="panel panel-default" style="margin:2em 0 0 0;">
+            <div class="panel panel-default" style="margin:1em 0 0 0;">
                 <div class="panel-heading" style="cursor: inherit">
                     <i class="fa fa-tasks fa-fw"></i> Pull Request Info
                 </div>
-            <table id="prinfo" class="table table-bordered table-hover table-striped trr">
+            <table id="prinfo" class="table table-bordered table-hover table-striped">
                 <thead>
                     <tr>
                         <th>Property</th>
@@ -69,5 +69,29 @@
         </div>
     </div>
             </div>
+    </div>
+    <div class="graphs">
+        <a href="#">Deadline period <span class="fa arrow"></span></a>
+        <ul id="dateUl" class="nav nav-third-level">
+            <li id="unusedli"></li>
+            <li id="date0li">
+                <div class="div-gr">
+                    <div class="input-group input-daterange">
+                        <input type="text" data-date-format='dd-mm-yyyy' class="form-control" value="">
+                        <span class="input-group-addon">to</span>
+                        <input type="text" data-date-format='dd-mm-yyyy' class="form-control" value="">
+                        <span class="input-group-btn">
+                            <button id="date0" class="btn btn-block" onclick="removeDaterange(this);">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <ul class="nav nav-third-level">
+            <li class="l-gr"></li>
+            <li><div class="div-gr"><button type="submit" class="btn btn-block" onclick="addNewDatarange(' ',' ')">+</button></div></li>
+        </ul>
     </div>
 </div>

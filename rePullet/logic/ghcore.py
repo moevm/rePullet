@@ -1,11 +1,13 @@
+import os.path
+from urllib.parse import urlparse
+
 import github
+from github import Github
 from github.Issue import Issue
 from github.PullRequest import PullRequest
-from github import Github
-from urllib.parse import urlparse
-import os.path
 
 from rePullet.logic.user import User
+
 
 #github.enable_console_debug_logging()
 
@@ -54,7 +56,8 @@ def getUserData(access_token):
         name = user.login
         avatar = user.avatar_url
         userid = user.id
-        return User(userid, ghI, name, avatar)
+        html_url = user.html_url
+        return User(userid, ghI, name, avatar, html_url)
     except github.GithubException:
         print('lol')
 
