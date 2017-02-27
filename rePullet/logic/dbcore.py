@@ -87,7 +87,7 @@ def addDeadlines(user, reponame, data):
     deadlines = loads_json(data)
     if not deadlines:
         return json.dumps({'message': 'Wrong data format!'})
-    print('ok, start db logic')
+    #print('ok, start db logic')
     deadlist = []
     #TODO: mb validate dataranges
     for ind, val in enumerate(deadlines):
@@ -97,3 +97,19 @@ def addDeadlines(user, reponame, data):
                          })
     #print(deadlist)
     db_deadlines.find_one_and_update({'repo_id': repoid},{'$set': {'dataranges': deadlist}}, upsert=True)
+
+def getDeadlinesByName(user, reponame):
+    repoid = gh.getRepoIdByName(user, reponame)
+    doc = db_deadlines.find_one({'repo_id': repoid})
+    return doc['dataranges'] if doc else [{}]
+
+def stringToColor(str):
+    hash = 0
+    for i in str:
+        hash = ord(i) + ((hash << 5) - hash)
+    colour = '#'
+    for x in range(0, 3):
+        v = hash >> (x*8) & 0xFF
+        colour+=('00' + hex(v).lstrip('0x'))[2:]
+    print(colour)
+    return colour

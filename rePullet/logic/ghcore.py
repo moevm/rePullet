@@ -50,7 +50,7 @@ def countReport(pull):
 
 def getUserData(access_token):
     try:
-        ghI = Github(login_or_token=access_token, timeout=15)
+        ghI = Github(login_or_token=access_token, timeout=5)
         user = ghI.get_user()
         #print(user)
         name = user.login

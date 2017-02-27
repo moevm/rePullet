@@ -4,9 +4,9 @@ import json
 from flask import g
 from flask import jsonify
 
-from rePullet.logic.ghcore import *
 import rePullet.logic.dbcore as db
-import sys
+from rePullet.logic.ghcore import *
+
 
 def group_gen(urluser, urlrepo):
     try:
@@ -21,9 +21,9 @@ def group_gen(urluser, urlrepo):
         #TODO: split exceptions
         return json.dumps({'message': 'Exception for some reason!'})
 
-def items_gen(urluser, urlrepo, params):
-    try:
-        repo = g.user.ghI.get_repo(urluser + '/' + urlrepo)
+def items_gen(user, urluser, urlrepo, params):
+        reponame = urluser + '/' + urlrepo
+        repo = user.ghI.get_repo(reponame)
         itemslist = []
         for pull in repo.get_pulls('all'):
             # проверяем, закрыт ли PR
@@ -55,10 +55,21 @@ def items_gen(urluser, urlrepo, params):
                                   'end': datetime.datetime.now().strftime('%Y-%m-%d %H:%M'),
                                   'rework': rebuild,
                                   'report': report})
+        #deadline improvements!
+        dataranges = db.getDeadlinesByName(user, reponame)
+        for datarange in dataranges:
+            print(datarange)
+            if datarange:
+                itemslist.append({'id': datarange['id'],
+                                  'start': datetime.datetime.strptime(datarange['start'], '%d-%m-%Y').strftime('%Y-%m-%d %H:%M'),
+                                  'end': datetime.datetime.strptime(datarange['end'], '%d-%m-%Y').strftime('%Y-%m-%d %H:%M'),
+                                  'type': 'background',
+                                  'content': 'lold',
+                                  'style': 'background-color:'+db.stringToColor('lold')+';'
+
+            })
+        print(itemslist)
         return json.dumps(itemslist)
-    except:
-        # TODO: split exceptions
-        return json.dumps({'message': 'Exception for some reason!'})
 
 
 def options_gen(urluser, urlrepo):

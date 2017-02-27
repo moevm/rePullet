@@ -133,6 +133,7 @@ var dateR =(function(time1, time2, del) {
 
 
 function readDataranges(){
+    var deadline = false;
     var dataranges = {
         a: []
     };
@@ -152,9 +153,8 @@ function readDataranges(){
         // do something with items[i], which is a <li> element
     }
     console.log(JSON.stringify(dataranges.a));
-    $.post('/api/items/'+repoid, {'data': JSON.stringify(dataranges.a), 'repoid': repoid});//, function() {
-                                                            //alert( "Data Loaded: ");
-        //});
-    return JSON.stringify(dataranges.a);
+    $.post('/api/items/'+repoid, {'data': JSON.stringify(dataranges.a), 'repoid': repoid}, function() {
+            console.log('update timeline');
+            loadTimeLine()
+    });
 }
-

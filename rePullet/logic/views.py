@@ -109,6 +109,7 @@ def old_dash():
 @app.route('/api/groups/<urluser>/<urlrepo>', defaults={'ending': None})
 #@app.route('/api/groups/<urluser>/<urlrepo>/', defaults={'ending': None})
 @app.route('/api/groups/<urluser>/<urlrepo>/<path:ending>')
+@login_required
 def get_groups(urluser, urlrepo, ending):
     return group_gen(urluser, urlrepo)
 
@@ -116,20 +117,20 @@ def get_groups(urluser, urlrepo, ending):
 @app.route('/api/items/<urluser>/<urlrepo>', defaults={'ending': None}, methods=['GET', 'POST'])
 #@app.route('/api/items/<urluser>/<urlrepo>/', defaults={'ending': None}, methods=['GET', 'POST'])
 @app.route('/api/items/<urluser>/<urlrepo>/<path:ending>', methods=['GET', 'POST'])
+@login_required
 def get_items(urluser, urlrepo, ending):
     if request.method == 'POST':
         print(request.form)
-        if g.user is not None and g.user.is_authenticated:
-            db.addDeadlines(g.user, urluser+'/'+urlrepo, request.form['data'])
-            db.printdb()
+        db.addDeadlines(g.user, urluser+'/'+urlrepo, request.form['data'])
+        db.printdb()
     params = request.args.to_dict()
-    print(params)
-    return items_gen(urluser, urlrepo, params)
+    return items_gen(g.user, urluser, urlrepo, params)
 
 
 @app.route('/api/options/<urluser>/<urlrepo>', defaults={'ending': None})
 #@app.route('/api/options/<urluser>/<urlrepo>/', defaults={'ending': None})
 @app.route('/api/options/<urluser>/<urlrepo>/<path:ending>')
+@login_required
 def get_options(urluser, urlrepo, ending):
     return options_gen(urluser, urlrepo)
 
