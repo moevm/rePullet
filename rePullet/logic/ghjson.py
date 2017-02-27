@@ -60,13 +60,16 @@ def items_gen(user, urluser, urlrepo, params):
         for datarange in dataranges:
             print(datarange)
             if datarange:
+                rgb = db.stringToColor('lold')
                 itemslist.append({'id': datarange['id'],
-                                  'start': datetime.datetime.strptime(datarange['start'], '%d-%m-%Y').strftime('%Y-%m-%d %H:%M'),
-                                  'end': datetime.datetime.strptime(datarange['end'], '%d-%m-%Y').strftime('%Y-%m-%d %H:%M'),
+                                  'start': datetime.datetime.strptime(
+                                      datarange['start'], '%d-%m-%Y').strftime('%Y-%m-%d %H:%M'),
+                                  'end': datetime.datetime.strptime(
+                                      datarange['end'], '%d-%m-%Y').strftime('%Y-%m-%d %H:%M'),
                                   'type': 'background',
                                   'content': 'lold',
-                                  'style': 'background-color:'+db.stringToColor('lold')+';'
-
+                                  'style': 'background-color:rgba('
+                                           ''+str(rgb[0])+','+str(rgb[1])+','+str(rgb[2])+', 0.2);'
             })
         print(itemslist)
         return json.dumps(itemslist)

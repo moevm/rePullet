@@ -112,4 +112,6 @@ def stringToColor(str):
         v = hash >> (x*8) & 0xFF
         colour+=('00' + hex(v).lstrip('0x'))[2:]
     print(colour)
-    return colour
+    rgb = tuple(int(colour.lstrip('#')[i:i+2], 16) for i in (0, 2 ,4))
+    return rgb
+    #return colour
