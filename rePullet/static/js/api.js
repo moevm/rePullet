@@ -180,7 +180,7 @@ function readDataranges(){
         }
         // do something with items[i], which is a <li> element
     }
-    //console.log(JSON.stringify(dataranges.a));
+    console.log(JSON.stringify(dataranges.a));
     return JSON.stringify(dataranges.a);
 }
 

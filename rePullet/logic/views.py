@@ -34,9 +34,9 @@ def index():
         return render_template('index.html', user=None)
 
 
-@app.route('/guide', methods=['GET', 'POST'])
+@app.route('/how-to-pullet', methods=['GET', 'POST'])
 def guide():
-    return render_template('index.html', user=None)
+    return app.send_static_file('guide.pdf')
 
 #
 # dashboard group
@@ -86,8 +86,9 @@ def go_view(ending):
     repoid = ending
     if repoid is None:
         return redirect(url_for('go_dash', ending=None))
-    #print(repoid)
-    return render_template('dashboard.html', user=g.user, path='view', r=repoid)
+    collaborator = is_colown(g.user, repoid)
+    print(collaborator)
+    return render_template('dashboard.html', user=g.user, path='view', r=repoid, access=collaborator)
 
 
 
@@ -106,34 +107,36 @@ def old_dash():
 
 
 @app.route('/api/groups/<urluser>/<urlrepo>', defaults={'ending': None})
-@app.route('/api/groups/<urluser>/<urlrepo>/', defaults={'ending': None})
-@app.route('/api/groups/<urluser>/<urlrepo>/<ending>')
+#@app.route('/api/groups/<urluser>/<urlrepo>/', defaults={'ending': None})
+@app.route('/api/groups/<urluser>/<urlrepo>/<path:ending>')
 def get_groups(urluser, urlrepo, ending):
     return group_gen(urluser, urlrepo)
 
 
 @app.route('/api/items/<urluser>/<urlrepo>', defaults={'ending': None}, methods=['GET', 'POST'])
-@app.route('/api/items/<urluser>/<urlrepo>/', defaults={'ending': None}, methods=['GET', 'POST'])
-@app.route('/api/items/<urluser>/<urlrepo>/<ending>', methods=['GET', 'POST'])
+#@app.route('/api/items/<urluser>/<urlrepo>/', defaults={'ending': None}, methods=['GET', 'POST'])
+@app.route('/api/items/<urluser>/<urlrepo>/<path:ending>', methods=['GET', 'POST'])
 def get_items(urluser, urlrepo, ending):
+    if request.method == 'POST':
+        print(request.form)
+        if g.user is not None and g.user.is_authenticated:
+            db.addDeadlines(g.user, urluser+'/'+urlrepo, request.form['data'])
+            db.printdb()
     params = request.args.to_dict()
-    # request_data = request.get_json()
-    # if (g.user is not None
-    #     and g.user.is_authenticated):
-    #     db.saveDates(request_data, g.user, urluser, urlrepo)
+    print(params)
     return items_gen(urluser, urlrepo, params)
 
 
 @app.route('/api/options/<urluser>/<urlrepo>', defaults={'ending': None})
-@app.route('/api/options/<urluser>/<urlrepo>/', defaults={'ending': None})
-@app.route('/api/options/<urluser>/<urlrepo>/<ending>')
+#@app.route('/api/options/<urluser>/<urlrepo>/', defaults={'ending': None})
+@app.route('/api/options/<urluser>/<urlrepo>/<path:ending>')
 def get_options(urluser, urlrepo, ending):
     return options_gen(urluser, urlrepo)
 
 
 @app.route('/api/user', defaults={'ending': None})
-@app.route('/api/user/', defaults={'ending': None})
-@app.route('/api/user/<ending>')
+#@app.route('/api/user/', defaults={'ending': None})
+@app.route('/api/user/<path:ending>')
 @login_required
 def get_user(ending):
     # saveDates(None, g.user, 'G0DZ', 'TPR')

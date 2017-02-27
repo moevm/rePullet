@@ -58,16 +58,9 @@ def getUserData(access_token):
         userid = user.id
         html_url = user.html_url
         return User(userid, ghI, name, avatar, html_url)
-    except github.GithubException:
+    except Exception:
         print('lol')
 
-def is_repo_owner(urlstr, user):
-    path = urlparse(urlstr).path
-    os.path.split(path)
-    while os.path.dirname(path) != '/':
-        path = os.path.dirname(path)
-    name = path[1:]
-    return True if user.name == name else False
 
 def getrepoid(user, url):
     # TODO: проверка url на валидность
@@ -89,4 +82,16 @@ def getRepoNameById(user, id):
     except github.GithubException:
         return None
 
+def getRepoIdByName(user, reponame):
+    try:
+        return user.ghI.get_repo(reponame).id
+    except github.GithubException:
+        return None
 
+def is_colown(user, id):
+    try:
+        if user.ghI.get_repo(id).owner.login == user.name:
+            return True
+        return user.ghI.get_repo(id).has_in_collaborators(user.name)
+    except github.GithubException:
+        return False

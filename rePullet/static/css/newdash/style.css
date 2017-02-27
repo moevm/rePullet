@@ -9106,7 +9106,7 @@ p.creating {
     }
 
     .panel-body.no-padding {
-        padding: 1em;
+        padding: 0em;
     }
 
     .main-content4 {
@@ -9244,3 +9244,23 @@ p.creating {
     background: #F8F8F8;
     /* min-height: 1000px; */
 }
+
+.panel-body.no-padding {
+    padding: 0em;
+}
+
+.btn-blockz {
+    display: block;
+    width: 100%;
+}
+
+.btn-label {position: relative;left: -12px;display: inline-block;padding: 6px 12px;background: rgba(0,0,0,0.15);border-radius: 3px 0 0 3px;}
+.btn-labeled {padding-top: 0;padding-bottom: 0;}
+.btni { margin-bottom:10px; }
+
+.top5 { margin-top:5px; }
+.top7 { margin-top:7px; }
+.top10 { margin-top:10px; }
+.top15 { margin-top:15px; }
+.top17 { margin-top:17px; }
+.top30 { margin-top:30px; }

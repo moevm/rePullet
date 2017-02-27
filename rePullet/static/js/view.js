@@ -1,5 +1,6 @@
 $(document).ready(function() {
     loadTimeLine();
+    bindDatepicker();
 });
 
 function loadTimeLine() {
@@ -42,7 +43,9 @@ function loadTimeLine() {
             timeline.setGroups(groups);
 
             document.getElementById("loading-wrapper").style.display = 'none';
-            document.getElementById("content-wrapper").style.display = 'block';
+            document.getElementById("timeline-wrapper").style.display = 'block';
+            document.getElementById("table-wrapper").style.display = 'block';
+
 
             timeline.on('select', function (properties) {
               logEvent(properties);
@@ -80,3 +83,78 @@ function insertRow(text1, text2) {
     cell1.innerHTML = text1;
     cell2.innerHTML = text2;
 }
+
+function bindDatepicker() {
+    $('.input-daterange input').each(function() {
+        $(this).datepicker({
+            dateFormat: 'dd-mm-yy'
+        });
+    });
+}
+
+function addNewDatarange(time1, time2) {
+    dateR(time1,time2);
+    bindDatepicker();
+}
+
+function removeDaterange(element) {
+    dateR(' ', ' ', element);
+}
+
+var dateR =(function(time1, time2, del) {
+    var counter = 0;
+    function addNew(time1, time2, del) {
+        //если идет параметр на удаление, удаляем
+        if(del != undefined){
+            removeOne(del);
+        }
+        else{
+            counter += 1;
+            $("#dateUl").find('li:last').after(function () {
+                return '<li id="date'+counter+'li"><div class="div-gr"><div class="input-group input-daterange">' +
+                    '<input type="text" data-date-format="dd-mm-yyyy" class="form-control" value="'+time1+'">' +
+                    '<span class="input-group-addon">to</span>' +
+                    '<input type="text" data-date-format="dd-mm-yyyy" class="form-control" value="'+time2+'">' +
+                    '<span class="input-group-btn"><button id="date'+counter+'" class="btn btn-block" onclick="removeDaterange(this);">' +
+                    '<span class="glyphicon glyphicon-remove"></span></button></span></div></div></li>';
+            });
+        }
+    }
+    function removeOne(element) {
+        counter-=1;
+        var myid = element.id;
+        var selector = '#'+ myid +'li';
+        $("li").remove(selector);
+    }
+    return function (time1, time2, del) {
+        return addNew(time1, time2, del)
+    }
+})();
+
+
+function readDataranges(){
+    var dataranges = {
+        a: []
+    };
+    var repoid = document.getElementById("repoid").getAttribute('src');
+    var ul = document.getElementById("dateUl");
+    var items = ul.getElementsByTagName("li");
+    for (var i = 1; i < items.length; ++i) {
+        var item = items[i];
+        var inputs = item.getElementsByTagName("input");
+        if(inputs[0].value != '' && inputs[1].value != '') {
+            dataranges.a.push({
+                'id': item.id,
+                'start': inputs[0].value,
+                'end': inputs[1].value
+            });
+        }
+        // do something with items[i], which is a <li> element
+    }
+    console.log(JSON.stringify(dataranges.a));
+    $.post('/api/items/'+repoid, {'data': JSON.stringify(dataranges.a), 'repoid': repoid});//, function() {
+                                                            //alert( "Data Loaded: ");
+        //});
+    return JSON.stringify(dataranges.a);
+}
+

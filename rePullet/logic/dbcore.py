@@ -1,7 +1,9 @@
 import pprint
 
+from flask import json
+
 import rePullet.logic.ghcore as gh
-from rePullet.logic import db, db_users
+from rePullet.logic import db, db_users, db_deadlines
 
 
 def saveDates(jsondata, user, urluser, urlrepo):
@@ -68,3 +70,30 @@ def printdb():
         print(c)
         for doc in db[c].find():
             pprint.pprint(doc)
+
+def loads_json(myjson):
+    try:
+        json_object = json.loads(myjson)
+    except ValueError:
+        return None
+    return json_object
+
+def addDeadlines(user, reponame, data):
+    repoid = gh.getRepoIdByName(user, reponame)
+    if not repoid:
+        return json.dumps({'message': '404! Missing information!'})
+    if not gh.is_colown(user, repoid):
+        return json.dumps({'message': 'Wrong user permissions!'})
+    deadlines = loads_json(data)
+    if not deadlines:
+        return json.dumps({'message': 'Wrong data format!'})
+    print('ok, start db logic')
+    deadlist = []
+    #TODO: mb validate dataranges
+    for ind, val in enumerate(deadlines):
+        deadlist.append({'id':chr(ind),
+                         'start': val['start'],
+                         'end': val['end']
+                         })
+    #print(deadlist)
+    db_deadlines.find_one_and_update({'repo_id': repoid},{'$set': {'dataranges': deadlist}}, upsert=True)

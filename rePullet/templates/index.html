@@ -32,11 +32,13 @@
           </div>
           <div id="fh5co-navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-              <li><a href="/guide">How to use</a></li>
+              <li><a href="/how-to-pullet">How to use</a></li>
             </ul>
             {% if not user %}
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="/login" class="btn btn-calltoaction btn-primary">Login</a></li>
+                <li><a href="/login" class="btn btn-calltoaction">
+                        <i class="fa fa-github fa-lg"></i>  Sign in with GitHub
+                    </a></li>
             </ul>
             {% else %}
             <ul class="nav navbar-nav navbar-right">

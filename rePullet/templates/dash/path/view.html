@@ -7,7 +7,7 @@
             <p class="small mb2">This could take a while</p>
         </div>
     </div>
-    <div id="content-wrapper" class="graphs" style="display: none">
+    <div id="timeline-wrapper" class="graphs" style="display: none">
             <h3 class="blank1">Repository Info</h3>
             <div class="col-lg-8">
                 <div class="Compose-Message">
@@ -15,9 +15,9 @@
                         <div class="panel-heading" style="cursor: inherit">
                             PR timeline
                         </div>
-{#                        <div class="panel-body no-padding">#}
+                        <div class="panel-body no-padding">
                             <div id="visualization"></div>
-{#                        </div>#}
+                        </div>
                    </div>
                 </div>
             </div>
@@ -27,8 +27,9 @@
                 <div class="panel-heading" style="cursor: inherit">
                     <i class="fa fa-tasks fa-fw"></i> Pull Request Info
                 </div>
-            <table id="prinfo" class="table table-bordered table-hover table-striped">
-                <thead>
+                <div class="panel-body no-padding" style="min-height: 500px">
+                    <table id="prinfo" class="table table-bordered table-hover table-striped">
+                    <thead>
                     <tr>
                         <th>Property</th>
                         <th>Value</th>
@@ -65,33 +66,75 @@
                             <td>0</td>
                         </tr>
                     </tbody>
-            </table>
+                    </table>
+                </div>
+            </div>
+            </div>
         </div>
     </div>
+    <div id="table-wrapper" class="graphs"> {#style="display: none">#}
+    {% if access %}
+        <div class="col-lg-8">
+    {% else %}
+        <div class="col-lg-10 col-lg-offset-1">
+    {% endif %}
+            <div class="Compose-Message">
+                    <div class="panel panel-default" style="margin:1em 0 0 0;">
+                        <div class="panel-heading" style="cursor: inherit">
+                            <i class="fa fa-tasks fa-fw"></i> Pull Requests Rating
+                        </div>
+                        <div class="panel-body no-padding"></div>
+                    </div>
             </div>
-    </div>
-    <div class="graphs">
-        <a href="#">Deadline period <span class="fa arrow"></span></a>
-        <ul id="dateUl" class="nav nav-third-level">
-            <li id="unusedli"></li>
-            <li id="date0li">
-                <div class="div-gr">
-                    <div class="input-group input-daterange">
-                        <input type="text" data-date-format='dd-mm-yyyy' class="form-control" value="">
-                        <span class="input-group-addon">to</span>
-                        <input type="text" data-date-format='dd-mm-yyyy' class="form-control" value="">
-                        <span class="input-group-btn">
-                            <button id="date0" class="btn btn-block" onclick="removeDaterange(this);">
-                                <span class="glyphicon glyphicon-remove"></span>
-                            </button>
-                        </span>
+        </div>
+        {% if access %}
+        <div class="col-lg-4">
+            <div class="Compose-Message">
+                <div class="panel panel-default" style="margin:1em 0 0 0;">
+                    <div class="panel-heading" style="cursor: inherit">
+                        <i class="fa fa-tasks fa-fw"></i> Deadline Periods
+                    </div>
+                    <div class="panel-body no-padding">
+                        <div class="row top10">
+                            <div class="col-xs-12">
+                                <div class="text-right">
+                                    <button class="btn-default btn" onclick="addNewDatarange(' ',' ')">Add New Datarange</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row top10">
+                            <ul id="dateUl" class="nav nav-third-level">
+                                <li id="unusedli"></li>
+                                <li id="date0li">
+                                    <div class="div-gr">
+                                        <div class="input-group input-daterange">
+                                            <input type="text" data-date-format='dd-mm-yyyy' class="form-control" value="">
+                                            <span class="input-group-addon">to</span>
+                                            <input type="text" data-date-format='dd-mm-yyyy' class="form-control" value="">
+                                            <span class="input-group-btn">
+                                                <button id="date0" class="btn btn-blockz" onclick="removeDaterange(this);">
+                                                    <span class="glyphicon glyphicon-remove"></span>
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="row top10">
+                            <div class="col-xs-12">
+                                <div class="text-center">
+                                    <button type="button" class="btn btni btn-labeled btn-info" onclick="readDataranges()">
+                                        <span class="btn-label"><i class="glyphicon glyphicon-refresh"></i></span>Save & Refresh Page
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </li>
-        </ul>
-        <ul class="nav nav-third-level">
-            <li class="l-gr"></li>
-            <li><div class="div-gr"><button type="submit" class="btn btn-block" onclick="addNewDatarange(' ',' ')">+</button></div></li>
-        </ul>
+            </div>
+        </div>
+        {% endif %}
+
     </div>
 </div>
