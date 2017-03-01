@@ -113,6 +113,18 @@ def stringToColor(str):
         v = hash >> (x*8) & 0xFF
         colour+=('00' + hex(v).lstrip('0x'))[2:]
     #print(colour)
-    rgb = tuple(int(colour.lstrip('#')[i:i+2], 16) for i in (0, 2 ,4))
+    rgb = tuple(int(colour.lstrip('#')[i:i+2], 16) for i in (0, 2, 4))
     return rgb
     #return colour
+
+def checkDeadline(user, reponame, name, start, end):
+    repodeadlines = getDeadlinesByName(user, reponame)
+    for k in repodeadlines:
+        #print(k)
+        if k['phrase'] in name:
+            #print(k['phrase'], name)
+            if end < k['end']:
+                #print(end)
+                return True
+    return False
+

@@ -34,16 +34,20 @@ function loadTimeLine() {
                 || itemsData.hasOwnProperty('message')
                 || optionsData.hasOwnProperty('message')
                 || ratingData.hasOwnProperty('message')){
-            //console.log('yes');
+            console.log('yes');
         }
         else{
             getRangesFromItems(itemsData);
+            //console.log('yes1');
+            showElements();
+            //console.log('yes2');
             //console.log('no errors!');
             var container = document.getElementById('visualization');
             var myNode = document.getElementById("visualization");
                 while (myNode.firstChild) {
                     myNode.removeChild(myNode.firstChild);
                 }
+            //console.log('yes3');
             // Create a DataSet (allows two way data-binding)
             var items = new vis.DataSet(itemsData);
             var groups = new vis.DataSet(groupsData);
@@ -52,8 +56,6 @@ function loadTimeLine() {
             timeline.setOptions(optionsData);
             timeline.setItems(items);
             timeline.setGroups(groups);
-
-            showElements();
 
             timeline.on('select', function (properties) {
               logEvent(properties);

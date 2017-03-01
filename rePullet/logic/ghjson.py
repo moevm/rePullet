@@ -19,6 +19,7 @@ def group_gen(urluser, urlrepo):
         return json.dumps(userslist)
     except:
         #TODO: split exceptions
+        print('groups error')
         return json.dumps({'message': 'Exception for some reason!'})
 
 def items_gen(user, urluser, urlrepo):
@@ -58,7 +59,7 @@ def items_gen(user, urluser, urlrepo):
         #deadline improvements!
         dataranges = db.getDeadlinesByName(user, reponame)
         for datarange in dataranges:
-            print(datarange)
+            #print(datarange)
             if datarange:
                 rgb = db.stringToColor(datarange['phrase'])
                 itemslist.append({'id': datarange['id'],
@@ -72,7 +73,8 @@ def items_gen(user, urluser, urlrepo):
                                   'style': 'background-color:rgba('
                                            ''+str(rgb[0])+','+str(rgb[1])+','+str(rgb[2])+', 0.2);'
             })
-        print(itemslist)
+        #print(itemslist)
+        #print('items error')
         return json.dumps(itemslist)
 
 
@@ -99,11 +101,12 @@ def options_gen(urluser, urlrepo):
         return json.dumps(options)
     except:
         # TODO: split exceptions
+        print('options error')
         return json.dumps({'message': 'Exception for some reason!'})
 
 
 def rating_gen(user, urluser, urlrepo):
-    try:
+    #try:
         reponame = urluser + '/' + urlrepo
         repo = user.ghI.get_repo(reponame)
         students = {}
@@ -131,7 +134,11 @@ def rating_gen(user, urluser, urlrepo):
                     if issue.user.login == issue.closed_by.login:
                         continue  # не учитываем PR, если открывший и закрывший PR совпали
                     student['closed'] += 1
-                    if True:
+                    if db.checkDeadline(user,
+                                        reponame,
+                                        issue.title,
+                                        issue.created_at,
+                                        issue.closed_at):
                         student['intime'] += 1
                     else:
                         student['delay'] += 1
@@ -141,9 +148,10 @@ def rating_gen(user, urluser, urlrepo):
                 #print(student)
         #print(students)
         return json.dumps(students)
-    except:
+    #except:
         # TODO: split exceptions
-        return json.dumps({'message': 'Exception for some reason!'})
+       # print('rating error')
+        #return json.dumps({'message': 'Exception for some reason!'})
 
 
 
