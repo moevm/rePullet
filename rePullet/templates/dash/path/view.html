@@ -37,34 +37,7 @@
                     </thead>
                     <tbody>
                     <tbody>
-                        <tr>
-                            <td>Title</td>
-                            <td>Lab2 branch</td>
-                        </tr>
-                        <tr>
-                            <td>Author</td>
-                            <td>0apm</td>
-                        </tr>
-                        <tr>
-                            <td>Created at</td>
-                            <td>2016-12-14 15:36</td>
-                        </tr>
-                        <tr>
-                            <td>Status</td>
-                            <td>closed</td>
-                        </tr>
-                        <tr>
-                            <td>Closed at</td>
-                            <td>2016-12-17 13:44</td>
-                        </tr>
-                        <tr>
-                            <td>Rework</td>
-                            <td>0</td>
-                        </tr>
-                        <tr>
-                            <td>Report</td>
-                            <td>0</td>
-                        </tr>
+
                     </tbody>
                     </table>
                 </div>
@@ -72,7 +45,7 @@
             </div>
         </div>
     </div>
-    <div id="table-wrapper" class="graphs"> {#style="display: none">#}
+    <div id="table-wrapper" class="graphs" style="display: none">
     {% if access %}
         <div class="col-lg-8">
     {% else %}
@@ -83,7 +56,28 @@
                         <div class="panel-heading" style="cursor: inherit">
                             <i class="fa fa-tasks fa-fw"></i> Pull Requests Rating
                         </div>
-                        <div class="panel-body no-padding"></div>
+                        <div class="panel-body no-padding">
+                            <table id="rating-table" class="table table-bordered table-condensed vertical-align fontsize">
+                                <thead>
+                                    <tr class="warning">
+                                        <th rowspan="2">#</th>
+                                        <th rowspan="2">GitHub login</th>
+                                        <th rowspan="2">GitHub name</th>
+                                        <th rowspan="2">GitHub link</th>
+                                        <th rowspan="2">Opened PR</th>
+                                        <th colspan="3">Closed PR</th>
+                                        <th rowspan="2">Rework</th>
+                                    </tr>
+                                    <tr class="warning">
+                                        <th>In time</th>
+                                        <th>Delay</th>
+                                        <th>All</th>
+                                    </tr>
+                              </thead>
+                              <tbody>
+                              </tbody>
+                            </table>
+                        </div>
                     </div>
             </div>
         </div>
@@ -95,32 +89,30 @@
                         <i class="fa fa-tasks fa-fw"></i> Deadline Periods
                     </div>
                     <div class="panel-body no-padding">
-                        <div class="row top10">
-                            <div class="col-xs-12">
+                        <div id="dateDiv" class="list-group">
+                            <div class="list-group-item noline-first top10">
                                 <div class="text-right">
-                                    <button class="btn-default btn" onclick="addNewDatarange(' ',' ')">Add New Datarange</button>
+                                    <button class="btn-default btn" onclick="addNewDatarange()">Add New Datarange</button>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row top10">
-                            <ul id="dateUl" class="nav nav-third-level">
-                                <li id="unusedli"></li>
-                                <li id="date0li">
-                                    <div class="div-gr">
-                                        <div class="input-group input-daterange">
-                                            <input type="text" data-date-format='dd-mm-yyyy' class="form-control" value="">
-                                            <span class="input-group-addon">to</span>
-                                            <input type="text" data-date-format='dd-mm-yyyy' class="form-control" value="">
-                                            <span class="input-group-btn">
-                                                <button id="date0" class="btn btn-blockz" onclick="removeDaterange(this);">
-                                                    <span class="glyphicon glyphicon-remove"></span>
-                                                </button>
-                                            </span>
-                                        </div>
+                            <div id="unuseddiv" class="list-group-item noline top10"></div>
+                            <div id="date0div" class="list-group-item noline datedivlol">
+                                <div class="form-group">
+                                    <div class="input-group multi-control-group input-daterange">
+                                        <input type="text" class="form-control" placeholder="Matching phrase...">
+                                        <span class="input-group-addon"> | </span>
+                                        <input type="text" class="form-control tt" data-date-format='dd-mm-yyyy' value="" placeholder="date">
+                                        <span class="input-group-addon">to</span>
+                                        <input type="text" class="form-control tt" data-date-format='dd-mm-yyyy' value="" placeholder="date">
+                                        <span class="input-group-btn">
+                                            <button id="date0" class="btn btn-blockz" onclick="removeDaterange(this);">
+                                                <span class="glyphicon glyphicon-remove"></span>
+                                            </button>
+                                        </span>
                                     </div>
-                                </li>
-                            </ul>
-                        </div>
+                                </div>
+                            </div>
+                            </div>
                         <div class="row top10">
                             <div class="col-xs-12">
                                 <div class="text-center">

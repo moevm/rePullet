@@ -87,7 +87,7 @@ def go_view(ending):
     if repoid is None:
         return redirect(url_for('go_dash', ending=None))
     collaborator = is_colown(g.user, repoid)
-    print(collaborator)
+    #print(collaborator)
     return render_template('dashboard.html', user=g.user, path='view', r=repoid, access=collaborator)
 
 
@@ -107,7 +107,6 @@ def old_dash():
 
 
 @app.route('/api/groups/<urluser>/<urlrepo>', defaults={'ending': None})
-#@app.route('/api/groups/<urluser>/<urlrepo>/', defaults={'ending': None})
 @app.route('/api/groups/<urluser>/<urlrepo>/<path:ending>')
 @login_required
 def get_groups(urluser, urlrepo, ending):
@@ -115,24 +114,30 @@ def get_groups(urluser, urlrepo, ending):
 
 
 @app.route('/api/items/<urluser>/<urlrepo>', defaults={'ending': None}, methods=['GET', 'POST'])
-#@app.route('/api/items/<urluser>/<urlrepo>/', defaults={'ending': None}, methods=['GET', 'POST'])
 @app.route('/api/items/<urluser>/<urlrepo>/<path:ending>', methods=['GET', 'POST'])
 @login_required
 def get_items(urluser, urlrepo, ending):
     if request.method == 'POST':
-        print(request.form)
+        #print(request.form)
         db.addDeadlines(g.user, urluser+'/'+urlrepo, request.form['data'])
-        db.printdb()
-    params = request.args.to_dict()
-    return items_gen(g.user, urluser, urlrepo, params)
+        #db.printdb()
+        return json.dumps(db.getDeadlinesByName(g.user, urluser+'/'+urlrepo))
+    #params = request.args.to_dict()
+    return items_gen(g.user, urluser, urlrepo)
 
 
 @app.route('/api/options/<urluser>/<urlrepo>', defaults={'ending': None})
-#@app.route('/api/options/<urluser>/<urlrepo>/', defaults={'ending': None})
 @app.route('/api/options/<urluser>/<urlrepo>/<path:ending>')
 @login_required
 def get_options(urluser, urlrepo, ending):
     return options_gen(urluser, urlrepo)
+
+
+@app.route('/api/rating/<urluser>/<urlrepo>', defaults={'ending': None})
+@app.route('/api/rating/<urluser>/<urlrepo>/<path:ending>')
+@login_required
+def get_rating(urluser, urlrepo, ending):
+    return rating_gen(g.user, urluser, urlrepo)
 
 
 @app.route('/api/user', defaults={'ending': None})
@@ -156,8 +161,12 @@ def post_addrepo():
 
 
 @app.route('/api/user/repos', methods=['GET'])
+@login_required
 def get_userrepo():
     return userrepos_json(g.user)
+
+
+
 
 #
 # login part

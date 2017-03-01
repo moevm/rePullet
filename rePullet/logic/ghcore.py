@@ -95,3 +95,12 @@ def is_colown(user, id):
         return user.ghI.get_repo(id).has_in_collaborators(user.name)
     except github.GithubException:
         return False
+
+def getUserName(user, login):
+    try:
+        a = user.ghI.get_user(login)
+        if a and a.name:
+            return a.name
+        return login
+    except github.GithubException:
+        return None
