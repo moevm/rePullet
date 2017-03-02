@@ -81,7 +81,7 @@ def addDeadlines(user, reponame, data):
 def getDeadlinesByName(user, reponame):
     repoid = gh.getRepoIdByName(user, reponame)
     doc = db_deadlines.find_one({'repo_id': repoid})
-    return doc['dataranges'] if doc else [{}]
+    return doc['dataranges'] if doc else []
 
 def stringToColor(str):
     hash = 0
@@ -91,18 +91,16 @@ def stringToColor(str):
     for x in range(0, 3):
         v = hash >> (x*8) & 0xFF
         colour+=('00' + hex(v).lstrip('0x'))[2:]
-    #print(colour)
     rgb = tuple(int(colour.lstrip('#')[i:i+2], 16) for i in (0, 2, 4))
     return rgb
-    #return colour
 
 def checkDeadline(user, reponame, name, start, end):
     repodeadlines = getDeadlinesByName(user, reponame)
-    for k in repodeadlines:
-        if 'phrase' in k and (k['phrase'] in name):
-            print(k['end'], end)
-            if end and end < datetime.datetime.strptime(k['end'], '%d-%m-%Y'):
-                #print(end)
-                return True
+    if repodeadlines:
+        for k in repodeadlines:
+            if 'phrase' in k and (k['phrase'] in name):
+                print(k['end'], end)
+                if end and end < datetime.datetime.strptime(k['end'], '%d-%m-%Y'):
+                    return True
     return False
 

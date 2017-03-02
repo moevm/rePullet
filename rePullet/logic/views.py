@@ -102,7 +102,7 @@ def get_items(urluser, urlrepo, ending):
 @app.route('/api/options/<urluser>/<urlrepo>/<path:ending>')
 @login_required
 def get_options(urluser, urlrepo, ending):
-    return options_gen(urluser, urlrepo)
+    return options_gen(g.user, urluser, urlrepo)
 
 
 @app.route('/api/rating/<urluser>/<urlrepo>', defaults={'ending': None})
@@ -110,13 +110,6 @@ def get_options(urluser, urlrepo, ending):
 @login_required
 def get_rating(urluser, urlrepo, ending):
     return rating_gen(g.user, urluser, urlrepo)
-
-
-@app.route('/api/user', defaults={'ending': None})
-@app.route('/api/user/<path:ending>')
-@login_required
-def get_user(ending):
-    return user_gen()
 
 
 @app.route('/api/addrepo', methods=['POST'])
@@ -128,6 +121,12 @@ def post_addrepo():
         return redirect(url_for('go_dash', ending=None))
     return redirect(url_for('go_dash', ending=None))
 
+
+@app.route('/api/user', defaults={'ending': None})
+@app.route('/api/user/<path:ending>')
+@login_required
+def get_user(ending):
+    return user_gen()
 
 @app.route('/api/user/repos', methods=['GET'])
 @login_required

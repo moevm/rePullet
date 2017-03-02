@@ -1,6 +1,7 @@
 import datetime
 import json
 
+import github
 from flask import g
 from flask import jsonify
 
@@ -23,20 +24,15 @@ def group_gen(urluser, urlrepo):
         return json.dumps({'message': 'Exception for some reason!'})
 
 def items_gen(user, urluser, urlrepo):
+    try:
         reponame = urluser + '/' + urlrepo
         repo = user.ghI.get_repo(reponame)
         itemslist = []
         for pull in repo.get_pulls('all'):
-            # проверяем, закрыт ли PR
-            issue = repo.get_issue(pull.number)
-            if pull.state == 'closed':
-                # получаем номер
+            issue = repo.get_issue(pull.number) # получаем номер
+            if pull.state == 'closed': # проверяем, закрыт ли PR
                 if issue.user.login == issue.closed_by.login:
                     continue  # не учитываем PR, если открывший и закрывший PR совпали
-                # # закрыт, смотрим автора закрытия
-                # if 'cl' in params:
-                #     if issue.closed_by.login != params['cl']:
-                #         continue  # не учитываем PR, закрытые не указанным пользователем
             rebuild = count_rebuild(issue, pull) #считаем количество доработок
             report = countReport(pull)  # теперь узнаем, содержит ли PR отчет о лабе (pdf, doc(x))
             if pull.state == 'closed':
@@ -56,10 +52,8 @@ def items_gen(user, urluser, urlrepo):
                                   'end': datetime.datetime.now().strftime('%Y-%m-%d %H:%M'),
                                   'rework': rebuild,
                                   'report': report})
-        #deadline improvements!
         dataranges = db.getDeadlinesByName(user, reponame)
         for datarange in dataranges:
-            #print(datarange)
             if datarange:
                 rgb = db.stringToColor(datarange['phrase'])
                 itemslist.append({'id': datarange['id'],
@@ -76,37 +70,39 @@ def items_gen(user, urluser, urlrepo):
         #print(itemslist)
         #print('items error')
         return json.dumps(itemslist)
+    except:
+        # TODO: split exceptions
+        print('groups error')
+        return json.dumps({'message': 'Exception for some reason!'})
 
 
-def options_gen(urluser, urlrepo):
+def options_gen(user, urluser, urlrepo):
     try:
         options = {}
-        datetimelist = []
-        for pull in g.user.ghI.get_repo(urluser + '/' + urlrepo).get_pulls('all'):
-            datetimelist.append(pull.created_at)
-        a = datetime.datetime.now() - datetime.timedelta(days=50)
-        if datetimelist:
-            a = min(datetimelist)
-        options['min'] = (a- datetime.timedelta(days=50)).strftime('%Y-%m-%d %H:%M')
+        reponame = urluser + '/' + urlrepo
+        pulldate = datetime.date.today() - datetime.timedelta(days=7)
+        try:
+            pulldate = user.ghI.get_repo(reponame).get_pull(1).created_at
+        except github.UnknownObjectException:
+            pass
+        options['min'] = (pulldate- datetime.timedelta(days=50)).strftime('%Y-%m-%d %H:%M')
         options['max'] = (datetime.datetime.now() + datetime.timedelta(days=50)).strftime('%Y-%m-%d %H:%M')
         options['zoomMin'] = 60000
-        options['zoomMax'] = (datetime.datetime.now() - a).total_seconds() * 10000
+        options['zoomMax'] = (datetime.datetime.now() - pulldate).total_seconds() * 10000
         options['height'] = '500px'
         options['verticalScroll'] = True
         options['maxHeight'] = '500px'
         options['dataAttributes'] = ['rework', 'report', 'isback']
         options['clickToUse'] = True
-        # options['type'] = 'point'
-        # options['showMajorLabels'] = 'false'
         return json.dumps(options)
     except:
         # TODO: split exceptions
-        print('options error')
+    #    print('options error')
         return json.dumps({'message': 'Exception for some reason!'})
 
 
 def rating_gen(user, urluser, urlrepo):
-    #try:
+    try:
         reponame = urluser + '/' + urlrepo
         repo = user.ghI.get_repo(reponame)
         students = {}
@@ -149,29 +145,15 @@ def rating_gen(user, urluser, urlrepo):
                 #print(student)
         #print(students)
         return json.dumps(students)
-    #except:
+    except:
         # TODO: split exceptions
-       # print('rating error')
-        #return json.dumps({'message': 'Exception for some reason!'})
+        print('rating error')
+        return json.dumps({'message': 'Exception for some reason!'})
 
 
 
 def user_gen():
     return jsonify(str(g.user))
-    # k = noUser(g.user.ghI)
-    # if k:
-    #     return k
-    # print(g.user.ghI.get_user().login)
-    # return jsonify(g.user.ghI.get_user().login)
-
-
-def date_gen(request_data):
-    print(jsonify(request_data))
-    return jsonify(request_data)
-
-
-def noUser(user):
-    return jsonify({"message": "Need to github authentication first!"}) if user is None else False
 
 def userrepos_json(user):
     a = db.getuserrepos(user) #repo list from db
