@@ -1,3 +1,4 @@
+import datetime
 import pprint
 
 from flask import json
@@ -5,28 +6,6 @@ from flask import json
 import rePullet.logic.ghcore as gh
 from rePullet.logic import db, db_users, db_deadlines
 
-
-def saveDates(jsondata, user, urluser, urlrepo):
-    if not jsondata:
-        jsondata = []
-    #начинаем с записи о репозитории
-    #смотрим, есть ли запись
-    doc = db_users.find_one({'gitId': user.id})
-    if not doc['repos']: #если записей не было, создаем
-        print(doc['repos'])
-        db_users.find_one_and_update({'gitId': user.id}, {'$set': {'repos': [{'name':urluser+'/'+urlrepo, 'dates': jsondata}]}})
-    else:
-        # записи были, ищем нашу
-        doc = db_users.find_one_and_update({'gitId': user.id, 'repos.name': urluser+'/'+urlrepo},{'$set':{'repos.$.dates': jsondata}})
-        if not doc:
-            db_users.find_one_and_update({'gitId': user.id},{'$addToSet': {'repos': [{'name': urluser + '/' + urlrepo, 'dates': jsondata}]}})
-        #doc['repos']['dates'] = jsondata
-        #db_users.update_one
-        # и если ее не было, добавим
-        #db_users.update_one({'gitId': user.id} , {'$push': {'repos': {'name': urluser+'/'+urlrepo, 'dates': jsondata}}})
-
-def loadDates():
-    pass
 
 def updateUserInfo(user):
     doc = db_users.find_one({'gitId': user.id})
@@ -120,10 +99,9 @@ def stringToColor(str):
 def checkDeadline(user, reponame, name, start, end):
     repodeadlines = getDeadlinesByName(user, reponame)
     for k in repodeadlines:
-        #print(k)
-        if k['phrase'] in name:
-            #print(k['phrase'], name)
-            if end < k['end']:
+        if 'phrase' in k and (k['phrase'] in name):
+            print(k['end'], end)
+            if end and end < datetime.datetime.strptime(k['end'], '%d-%m-%Y'):
                 #print(end)
                 return True
     return False

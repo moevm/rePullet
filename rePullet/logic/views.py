@@ -20,11 +20,13 @@ gh = oauth.remote_app(
     app_key='GITHUB'
 )
 
+#
+# non user routes
+#
 
 @app.before_request
 def before_request():
     g.user = current_user
-
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -38,13 +40,13 @@ def index():
 def guide():
     return app.send_static_file('guide.pdf')
 
-#
-# dashboard group
-#
 
 
-@app.route('/dashboard', defaults={'ending': None}, methods=['GET', 'POST'])
-#@app.route('/dashboard/', defaults={'ending': None}, methods=['GET', 'POST']) # trailing slash, BITCH
+#
+# dashboard group routes
+#
+
+@app.route('/dashboard', defaults={'ending': None}, methods=['GET', 'POST']) # remember trailing slash, BITCH
 @app.route('/dashboard/<path:ending>', methods=['GET', 'POST'])
 @login_required
 def go_dash(ending):
@@ -67,43 +69,16 @@ def go_dash(ending):
         #db.printdb()
         return redirect(url_for('go_view', ending=repo_name))
     return render_template('dashboard.html', user=g.user, path=ending)
-#
-# @app.route('/preview', methods=['GET', 'POST'])
-# @login_required
-# def go_preview():
-#     # TODO: redirect without error window
-#     if request.form.get('repoid'):
-#         session['repoid'] = request.form.get('repoid')
-#         return redirect(url_for('go_preview', ending=None))
-#     return render_template('dashboard.html', user=g.user, path='preview')
 
 
 @app.route('/view', defaults={'ending': None}, methods=['GET'])
 @app.route('/view/<path:ending>', methods=['GET'])
 @login_required
 def go_view(ending):
-    #print(ending)
-    repoid = ending
-    if repoid is None:
+    if ending is None:
         return redirect(url_for('go_dash', ending=None))
-    collaborator = is_colown(g.user, repoid)
-    #print(collaborator)
-    return render_template('dashboard.html', user=g.user, path='view', r=repoid, access=collaborator)
-
-
-
-
-@app.route('/olddashboard', methods=['GET', 'POST'])
-@login_required
-def old_dash():
-    if request.form.get('url'):
-        session['urlrepo'] = request.form.get('url')
-        return redirect(url_for('go_dash', ending=None))
-    if g.user is None or not g.user.is_authenticated:
-        return redirect(url_for('login', next=request.url), code=307)  # POST = 307
-    #if is_repo_owner(session['urlrepo'], g.user):
-    #    print('success!')
-    return render_template('olddashboard.html', ddd=session.get('urlrepo'), user=g.user)
+    collaborator = is_colown(g.user, ending)
+    return render_template('dashboard.html', user=g.user, path='view', r=ending, access=collaborator)
 
 
 @app.route('/api/groups/<urluser>/<urlrepo>', defaults={'ending': None})
@@ -118,11 +93,8 @@ def get_groups(urluser, urlrepo, ending):
 @login_required
 def get_items(urluser, urlrepo, ending):
     if request.method == 'POST':
-        #print(request.form)
         db.addDeadlines(g.user, urluser+'/'+urlrepo, request.form['data'])
-        #db.printdb()
         return json.dumps(db.getDeadlinesByName(g.user, urluser+'/'+urlrepo))
-    #params = request.args.to_dict()
     return items_gen(g.user, urluser, urlrepo)
 
 
@@ -141,11 +113,9 @@ def get_rating(urluser, urlrepo, ending):
 
 
 @app.route('/api/user', defaults={'ending': None})
-#@app.route('/api/user/', defaults={'ending': None})
 @app.route('/api/user/<path:ending>')
 @login_required
 def get_user(ending):
-    # saveDates(None, g.user, 'G0DZ', 'TPR')
     return user_gen()
 
 
@@ -154,8 +124,7 @@ def get_user(ending):
 def post_addrepo():
     # TODO: Method not allowed
     if request.form.get('url'):
-        # добавляем репозиторий к отслеживаемым
-        db.addToTrack(request.form.get('url'), g.user)
+        db.addToTrack(request.form.get('url'), g.user)  # добавляем репозиторий к отслеживаемым
         return redirect(url_for('go_dash', ending=None))
     return redirect(url_for('go_dash', ending=None))
 
@@ -166,12 +135,9 @@ def get_userrepo():
     return userrepos_json(g.user)
 
 
-
-
 #
 # login part
 #
-
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -205,7 +171,7 @@ def authorized():
     #sss = (resp['access_token'], '')
     str = resp['access_token']
     session['github_token'] = str
-    user = getUserData(str)
+    user = getUserData(str,)
     db.updateUserInfo(user)
     login_user(user)
     # if request.args.get('next'):
@@ -220,7 +186,7 @@ def authorized():
 def load_user(id):
     if 'github_token' in session:
         return getUserData(session['github_token'])
-    return User(id, None, None, None)
+    return User(id, None, None, None, None)
 
 @login_manager.unauthorized_handler
 def unauthorized():

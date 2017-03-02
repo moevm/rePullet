@@ -132,6 +132,7 @@ def rating_gen(user, urluser, urlrepo):
                 student['opened'] += 1
                 if pull.state == 'closed':
                     if issue.user.login == issue.closed_by.login:
+                        student['opened'] -= 1
                         continue  # не учитываем PR, если открывший и закрывший PR совпали
                     student['closed'] += 1
                     if db.checkDeadline(user,

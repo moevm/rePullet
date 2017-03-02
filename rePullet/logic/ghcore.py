@@ -50,15 +50,16 @@ def countReport(pull):
 
 def getUserData(access_token):
     try:
-        ghI = Github(login_or_token=access_token, timeout=5)
+        ghI = Github(login_or_token=access_token, timeout=25)
         user = ghI.get_user()
         #print(user)
-        name = user.login
-        avatar = user.avatar_url
-        userid = user.id
-        html_url = user.html_url
+        name = ghI.get_user().login
+        avatar = ghI.get_user().avatar_url
+        userid = ghI.get_user().id
+        html_url = ghI.get_user().html_url
+        #print(ghI.rate_limiting)
         return User(userid, ghI, name, avatar, html_url)
-    except Exception:
+    except:
         print('lol')
 
 
