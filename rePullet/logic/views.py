@@ -38,7 +38,7 @@ def index():
 
 @app.route('/how-to-pullet', methods=['GET', 'POST'])
 def guide():
-    return app.send_static_file('guide.pdf')
+    return app.send_static_file('Pullet.pdf')
 
 
 
