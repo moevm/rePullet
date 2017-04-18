@@ -2,7 +2,7 @@ Env setting
 
 <pre>
 sudo apt-get install python3 python3-pip
-sudo python3-pip install -r requirements.txt
+sudo pip3 install -r requirements.txt
 </pre>
 
 Getting GitHub OAuth
