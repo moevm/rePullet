@@ -1,7 +1,7 @@
 Env setting
 
 <pre>
-sudo apt-get install python3 python3-pip
+sudo apt-get install python3 python3-pip mongodb
 sudo pip3 install -r requirements.txt
 </pre>
 
