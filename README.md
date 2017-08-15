@@ -20,9 +20,9 @@ class Config:
   MONGOHOST = 'localhost'
   MONGOPORT = 27017
   MONGONAME = 'pullet'
-  SECRET_KEY = 'your key'
-  consumer_key = 'Client ID'
-  consumer_secret = 'Client Secret'
+  SECRET_KEY = 'kkkkkkkk'
+  consumer_key = '<place_here your Client ID obtained at previous steps>'
+  consumer_secret = '<place_here your Client Secret obtained at previous steps>'
   scope = {'scope': 'user:email'}
 </pre>
 
