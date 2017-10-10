@@ -1,54 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-      <meta charset="utf-8">
-      <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <meta name="description" content="">
-      <meta name="author" content="G0DZ">
-      <link rel="icon" href="{{ url_for('static', filename='img/favicon.png') }}">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="r.lurye">
+    <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
 
-      <title>Pullet | Main</title>
+    <title>Project Avalance</title>
 
-      <!-- Bootstrap core CSS -->
-      <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
-      <!-- Font-Awesome -->
-      <link href="{{ url_for('static', filename='css/font-awesome.min.css') }}" rel="stylesheet">
-      <!-- Custom styles for this template -->
-      <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
-{#      <link href="{{ url_for('static', filename='css/styleNew.css') }}" rel="stylesheet">#}
+    <!-- Bootstrap core CSS -->
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="{{ url_for('static', filename='css/font-awesome.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
 
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="{{ url_for('static', filename='js/ie10-viewport-bug-workaround.js') }}"></script>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
   </head>
 
   <body>
-  <header id="fh5co-header" role="banner">
 
-      <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-        <div class="container">
-          <div class="navbar-header">
-            <!-- Mobile Toggle Menu Button -->
-            <a href="#" class="js-fh5co-nav-toggle fh5co-nav-toggle" data-toggle="collapse" data-target="#fh5co-navbar" aria-expanded="false" aria-controls="navbar"><i></i></a>
-            <a class="navbar-brand" href="/">Pullet</a>
-          </div>
-          <div id="fh5co-navbar" class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-              <li><a href="/how-to-pullet">How to use</a></li>
-            </ul>
-            {% if not user %}
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="/login" class="btn btn-calltoaction">
-                        <i class="fa fa-github fa-lg"></i>  Sign in with GitHub
-                    </a></li>
-            </ul>
-            {% else %}
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="/dashboard" class="btn btn-calltoaction btn-primary">See your repositories</a></li>
-            </ul>
-            {% endif %}
-          </div>
-        </div>
-      </nav>
-  </header>
+{#    <div id="h">#}
+{#      <div class="logo" name="top">Project Avalance</div>#}
+{##}
+{#        {% if user %}#}
+{#            <h6>{{ user }}</h6>#}
+{#        {% else %}#}
+{#            <div>#}
+{#                <a href='/login' class='btn btn-conf btn-green' type="submit">Sign up</a>#}
+{#            </div>#}
+{#        {% endif %}#}
+{#        <div class="social hidden-xs">#}
+{#            <a href="https://twitter.com/r_lurye"><i class="fa fa-twitter"></i></a>#}
+{#            <a href="https://www.instagram.com/cherepkova.yulya/"><i class="fa fa-instagram"></i></a>#}
+{#            <a href="https://vk.com/r.lurye"><i class="fa fa-vk"></i></a>#}
+{#        </div>#}
+{#        <nav class="pull-right nav-collapse collapse">#}
+{#            <ul id="menu-main" class="nav">#}
+{#                <li><a title="portfolio" href="#portfolio">Portfolio</a></li>#}
+{#                <li><a title="services" href="#services">Services</a></li>#}
+{#                <li><a title="news" href="#news">News</a></li>#}
+{#                <li><a title="team" href="#team">Team</a></li>#}
+{#                <li><a title="contact" href="#contact">Contact</a></li>#}
+{#            </ul>#}
+{#        </nav>#}
+{#    </div><!-- /H -->#}
 
     <div id="mainC">
       <div class="container">
@@ -61,6 +66,7 @@
                 <button class='btn btn-conf btn-green' type="submit">Search</button>
               </form>
             </div><!--/mt-->
+            <h6><!--smth to print--></h6>
           </div>
         </div><!--/row-->
       </div><!--/container-->
@@ -141,20 +147,23 @@
         <div class="row centered">
           <h2>You Can Contact Us</h2>
           <h5>RM.LURYE@GMAIL.COM</h5>
+
           <p class="mt">
-            <a href="http://moevm.info/"><i class="fa fa-university"></i></a>
-            <a href="https://vk.com/moevm_leti"><i class="fa fa-vk"></i></a>
-            <a href="https://twitter.com/moevm_leti"><i class="fa fa-twitter"></i></a>
-            <a href="https://github.com/moevm"><i class="fa fa-github"></i></a>
+            <a href="https://twitter.com/r_lurye"><i class="fa fa-twitter"></i></a>
+            <a href="https://www.instagram.com/cherepkova.yulya/"><i class="fa fa-instagram"></i></a>
+            <a href="https://github.com/G0DZ"><i class="fa fa-github"></i></a>
+            <a href="https://vk.com/r.lurye"><i class="fa fa-vk"></i></a>
           </p>
-          <h6 class="mt">Copyright © MOEVM-LETI 2017. All rights reserved.</h6>
+          <h6 class="mt">Copyright © MOEVM 2016. All rights reserved.</h6>
         </div><!--/row-->
       </div><!--/container-->
     </div><!--/F-->
+
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="{{ url_for('static', filename='js/jquery-3.1.1.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+{#    <script src="{{ url_for('static', filename='js/retina-1.1.0.js') }}"></script>#}
   </body>
 </html>

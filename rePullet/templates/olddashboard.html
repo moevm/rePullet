@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="r.lurye">
+
+    <title>Project Avalance</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <!-- MetisMenu CSS -->
+    <link href="{{ url_for('static', filename='css/dash/metisMenu.min.css') }}" rel="stylesheet">
+    <!-- Timeline CSS -->
+    <link href="{{ url_for('static', filename='css/dash/timeline.css') }}" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="{{ url_for('static', filename='css/dash/startmin2.css') }}" rel="stylesheet">
+    <!-- Datepicker CSS -->
+    <link href="{{ url_for('static', filename='css/dash/bootstrap-datepicker.min.css') }}" rel="stylesheet">
+    <!-- Morris Charts CSS -->
+    <link href="{{ url_for('static', filename='css/dash/morris.css') }}" rel="stylesheet">
+    <!-- Custom Fonts -->
+    <link href="{{ url_for('static', filename='css/font-awesome.min.css') }}" rel="stylesheet">
+    <!-- CSS for timeline objects -->
+    <link href="{{ url_for('static', filename='css/tlobjects.css') }}" rel="stylesheet">
+      <style>
+        #visualization {
+            box-sizing: border-box;
+            width: 100%;
+            height: 550px;
+        }
+      </style>
+    <link href="{{ url_for('static', filename='css/timeline.min.css') }}" rel="stylesheet" type="text/css" />
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<embed id='urlrepo' src="{{ ddd }}" hidden="true"></embed>
+<embed id='testjs' src="" hidden="true"></embed>
+<div id="wrapper">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/">Project Avalance</a>
+        </div>
+
+        <button id="btnSideControl" type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+
+        <!-- Top Navigation: Left Menu -->
+        <ul class="nav navbar-nav navbar-left navbar-top-links">
+            <li><a href="#"><i class="fa fa-home fa-fw"></i></a></li>
+        </ul>
+
+        <!-- Top Navigation: Right Menu -->
+        <ul class="nav navbar-right navbar-top-links">
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    <i class="fa fa-user fa-fw"></i> {{ user.name }}<b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu dropdown-user">
+                    <li><a href="/logout"><i class="fa fa-sign-out fa-fw"></i> Logout</a></li>
+                </ul>
+            </li>
+        </ul>
+
+        <!-- Sidebar -->
+        <div id='sideControl' class="navbar-default sidebar" role="navigation">
+            <div class="sidebar-nav navbar-collapse">
+
+                <ul class="nav" id="side-menu">
+                    <li class="sidebar-search">
+                        <div class="input-group" style="margin: 0 auto;">
+                            <button class="btn btn-primary" type="button" onclick="sendDataranges()">
+                                <i class="fa fa-refresh"></i> Update timeline
+                            </button>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="#" class="active"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-wrench fa-fw"></i> Options<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="#"> Merged rules<span class="fa arrow"></span></a>
+                                <ul class="nav nav-third-level">
+                                    <li>
+                                        <div class="div-gr">
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="fa fa-github fa-lg"></i></span>
+                                                <input id="cl-user" type="text" class="form-control" placeholder="Username">
+                                            </div>
+                                            <button type="submit" class="btn btn-default center-block" onclick="getTimeline()">Submit</button>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#">Deadline period <span class="fa arrow"></span></a>
+                                <ul id="dateUl" class="nav nav-third-level">
+                                    <li id="unusedli"></li>
+                                    <li id="date0li">
+                                        <div class="div-gr">
+                                            <div class="input-group input-daterange">
+                                                <input type="text" data-date-format='dd-mm-yyyy' class="form-control" value="">
+                                                <span class="input-group-addon">to</span>
+                                                <input type="text" data-date-format='dd-mm-yyyy' class="form-control" value="">
+                                                <span class="input-group-btn">
+                                                    <button id="date0" class="btn btn-block" onclick="removeDaterange(this);">
+                                                        <span class="glyphicon glyphicon-remove"></span>
+                                                    </button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <ul class="nav nav-third-level">
+                                    <li class="l-gr"></li>
+                                    <li><div class="div-gr"><button type="submit" class="btn btn-block" onclick="addNewDatarange(' ',' ')">+</button></div></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#">Tracking <span class="fa arrow"></span></a>
+                                <ul class="nav nav-third-level">
+                                    <li>
+                                        <div class="div-gr">
+                                            <label><input type="checkbox" value=""> Show self-closed pull requests</label>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Content -->
+    <div id="page-wrapper">
+        <div class="container-fluid">
+
+            <!-- ... Your content goes here ... -->
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Dashboard</h1>
+                </div> <!-- /.col-lg-12 -->
+            </div>
+
+            <div id="main-content" class="row" style="display: none">
+                <div class="col-lg-8" >
+                        <div id="stats" class="panel panel-default">
+                            <div class="panel-heading">
+                                <i class="fa fa-bar-chart-o fa-fw"></i> Pull Requests Timeline for {{ddd}}
+                                <div class="pull-right">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-default btn-xs dropdown-toggle"
+                                                data-toggle="dropdown">
+                                            Actions
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu pull-right" role="menu">
+                                            <li><a href="#">Action</a>
+                                            </li>
+                                            <li><a href="#">Another action</a>
+                                            </li>
+                                            <li><a href="#">Something else here</a>
+                                            </li>
+                                            <li class="divider"></li>
+                                            <li><a href="#">Separated link</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.panel-heading -->
+                            <div class="panel-body" id="vis-content" style="display: none">
+                                <div id="visualization"></div>
+                            </div>
+                            <!-- /.panel-body -->
+                        </div>
+                    </div>
+                <!-- /.col-lg-8 -->
+                <div class="col-lg-4">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <i class="fa fa-tasks fa-fw"></i> Pull Request Info
+                            </div>
+                            <!-- /.panel-heading -->
+                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <table id="prhint" class="table table-bordered table-hover table-striped " style="display: none">
+                                        <thead>
+                                        <tr>
+                                            <th>Property</th>
+                                            <th>Value</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- /.table-responsive-->
+                            </div>
+                            <!-- /.panel-body -->
+                        </div>
+                        <!-- /.panel -->
+                </div>
+                <!-- /.col-lg-4 -->
+            </div>
+            <div id="preview-container" class="jumbotron vertical-center" style="">
+                <div class="col-lg-12 text-center" >
+                    <img id="preview-loading" src="{{ url_for('static', filename='img/realtime-ajax-loader.gif') }}" style="">
+                    <span id="preview-text" style=""> Fetching pull requests data...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- jQuery -->
+<script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+<!-- Metis Menu Plugin JavaScript -->
+<script src="{{ url_for('static', filename='js/dash/metisMenu.min.js') }}"></script>
+<!-- Custom Theme JavaScript -->
+<script src="{{ url_for('static', filename='js/dash/startmin.js') }}"></script>
+<!-- Datepicker JavaScript -->
+<script src="{{ url_for('static', filename='js/dash/bootstrap-datepicker.min.js') }}"></script>
+<!-- Main API in JavaSctipt -->
+<script src="{{ url_for('static', filename='js/api.js') }}"></script>
+<!-- Moment for Timeline-->
+<script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+<!-- VIS JS lib -->
+<script src="{{ url_for('static', filename='js/vis.min.js') }}"></script>
+</body>
+</html>
