@@ -126,6 +126,10 @@ def post_addrepo():
 def delete_repo():
     a = db.getuserrepos(g.user)
     checked = request.form.getlist("check")
+    for todelete in checked:
+        for repo in a:
+            if str(todelete) == str(repo['id']):
+                a.remove(repo)
     print (checked)
     print (a)
     return redirect(url_for('go_dash', ending=None))
