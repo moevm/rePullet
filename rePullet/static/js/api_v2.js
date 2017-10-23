@@ -15,7 +15,7 @@ function getUserRepos() {
             (function(e) {
                 $("#repoTBody").find('tr:last').after(function () {
                     return '<tr class="unread checked clickable-row" data-repo="'+reposData[e]['fullname']+'">' +
-                        '<td class="hidden-xs"><input type="checkbox" name="check" class="checkbox" value="123"></td>' +
+                        '<td class="hidden-xs"><input type="checkbox" name="check" class="checkbox" value="'+reposData[e]['id']+'"></td>' +
                         '<td class="hidden-xs"><i class="fa fa-star icon-state-warning"></i></td>' +
                         '<td class="hidden-xs">id</td>' +
                         '<td>'+reposData[e]['id']+'</td>' +
