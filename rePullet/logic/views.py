@@ -121,6 +121,16 @@ def post_addrepo():
         return redirect(url_for('go_dash', ending=None))
     return redirect(url_for('go_dash', ending=None))
 
+@app.route('/api/delete')
+@login_required
+def delete_repo():
+    a = db.getuserrepos(g.user)
+    checked = request.form.getlist("check")
+    print (checked)
+    print (a)
+    return redirect(url_for('go_dash', ending=None))
+
+
 
 @app.route('/api/user', defaults={'ending': None})
 @app.route('/api/user/<path:ending>')
