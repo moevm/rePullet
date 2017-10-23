@@ -18,17 +18,18 @@
                                         <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-cog"></i> <span class="caret"></span></a>
                                         <ul class="dropdown-menu dropdown-menu-left" role="menu">
                                             <li>
-                                                <a href="#" title="">
+                                                <a href="/api/download" title="">
                                                     <i class="fa fa-download icon_9"></i>
                                                     Download
                                                 </a>
                                             </li>
                                             <li class="divider"></li>
                                             <li>
-                                                <a href="#" class="font-red" title="">
-                                                    <i class="fa fa-times" icon_9=""></i>
-                                                    Delete
-                                                </a>
+{#                                                <a href="/api/delete" class="font-red" title="">#}
+{#                                                    <i class="fa fa-times" icon_9=""></i>#}
+{#                                                    Delete#}
+{#                                                </a>#}
+                                                <button type="submit" class="font-red" form="tableform">Delete</button>
                                             </li>
                                         </ul>
                                     </div>
@@ -40,13 +41,13 @@
                         </div>
                    </div>
                     {# сама таблица, заполняемая репозиториями #}
-                    <form class="table form" role="form" action="/dashboard/delete" method="post">
+                    <form id="tableform" action="/api/delete" role="form" method="post">
                         <table class="table table-fhr">
                             <tbody id="repoTBody">
                                 <tr style="display: none;"></tr>
                                 <tr class="unread checked clickable-row">
                                     <td class="hidden-xs">
-                                        <input type="checkbox" class="checkbox">
+                                        <input type="checkbox" name="check" value="dicksucker" class="checkbox">
                                     </td>
                                     <td class="hidden-xs">
                                         <i class="fa fa-star icon-state-warning"></i>
