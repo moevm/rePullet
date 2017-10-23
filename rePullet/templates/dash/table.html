@@ -36,34 +36,36 @@
                         <div class="clearfix"> </div>
                     </div>
                         <div class="float-right">
-                                <span class="text-muted m-r-sm">Showing 20 of 346 </span>
+                                <span class="text-muted m-r-sm">{#Showing 20 of 346#} </span>
                         </div>
                    </div>
                     {# сама таблица, заполняемая репозиториями #}
-                    <table class="table table-fhr">
-                        <tbody id="repoTBody">
-                            <tr style="display: none;"></tr>
-                            <tr class="unread checked clickable-row">
-                                <td class="hidden-xs">
-                                    <input type="checkbox" class="checkbox">
-                                </td>
-                                <td class="hidden-xs">
-                                    <i class="fa fa-star icon-state-warning"></i>
-                                </td>
-                                <td class="hidden-xs">
-                                    Google
-                                </td>
-                                <td>
-                                    Nullam quis risus eget urna mollis ornare vel eu leo
-                                </td>
-                                <td>
-                                </td>
-                                <td>
-                                    12 march
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <form class="table form" role="form" action="/dashboard/delete" method="post">
+                        <table class="table table-fhr">
+                            <tbody id="repoTBody">
+                                <tr style="display: none;"></tr>
+                                <tr class="unread checked clickable-row">
+                                    <td class="hidden-xs">
+                                        <input type="checkbox" class="checkbox">
+                                    </td>
+                                    <td class="hidden-xs">
+                                        <i class="fa fa-star icon-state-warning"></i>
+                                    </td>
+                                    <td class="hidden-xs">
+                                        Google
+                                    </td>
+                                    <td>
+                                        Nullam quis risus eget urna mollis ornare vel eu leo
+                                    </td>
+                                    <td>
+                                    </td>
+                                    <td>
+                                        {#12 march#}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
                    </div>
             </div>
             <div class="clearfix"> </div>
