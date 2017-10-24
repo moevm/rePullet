@@ -232,19 +232,24 @@ function buildingRating(data) {
         tableRef.removeChild(tableRef.rows[0]);
     keysarr.forEach(function (item, i, arr) {
         var newRow   = tableRef.insertRow(tableRef.rows.length);
+        for (var i = 0; i < 7; i++) {
+            newRow.insertCell(newRow.length);
+        }
         for(var k in data[arr[i]]){
-           newRow.insertCell(newRow.length);
+
         }
         var ind = i+1;
         newRow.cells[0].innerHTML = "<b>"+ind+"</b>";
-        newRow.cells[1].innerHTML = data[item]['login'];
-        newRow.cells[2].innerHTML = data[item]['full_name'];
-        newRow.cells[3].innerHTML = '<a href="'+data[item]['url']+'"style:="cursor: pointer;">'+data[item]['url']+'<a/>';
-        newRow.cells[4].innerHTML = data[item]['opened'];
-        newRow.cells[5].innerHTML = data[item]['intime'];
-        newRow.cells[6].innerHTML = data[item]['delay'];
-        newRow.cells[7].innerHTML = data[item]['closed'];
-        newRow.cells[8].innerHTML = data[item]['rework'];
+        newRow.cells[1].innerHTML = "<div>" + data[item]['login'] + "</div>"+
+                                    "<div>" + data[item]['full_name'] + "</div>"+
+                                    "<div>" + '<a href="'+data[item]['url']+'"style:="cursor: pointer;">'+data[item]['url']+'<a/>' + "</div>";
+        //newRow.cells[2].innerHTML = data[item]['full_name'];
+        //newRow.cells[3].innerHTML = '<a href="'+data[item]['url']+'"style:="cursor: pointer;">'+data[item]['url']+'<a/>';
+        newRow.cells[2].innerHTML = data[item]['opened'];
+        newRow.cells[3].innerHTML = data[item]['intime'];
+        newRow.cells[4].innerHTML = data[item]['delay'];
+        newRow.cells[5].innerHTML = data[item]['closed'];
+        newRow.cells[6].innerHTML = data[item]['rework'];
     });
 }
 
