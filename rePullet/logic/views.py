@@ -125,18 +125,19 @@ def post_addrepo():
 @login_required
 def delete_repo():
     submitType = request.args.get("submitType")
-    print (submitType)
+    # print (submitType)
     a = db.getuserrepos(g.user)
-    checked = request.form.getlist("check")
-    if(len(checked) > 0):
-        for todelete in checked:
-            for repo in a:
-                if str(todelete) == str(repo['id']):
-                    # a.remove(repo)
-                    db.deleteTrackingRepo(g.user, repo['id'])
-        print (checked)
-        print (a)
-        print (db.getuserrepos(g.user))
+    checked = request.args.getlist("check")
+    if(submitType == "delete"):
+        if(len(checked) > 0):
+            for todelete in checked:
+                for repo in a:
+                    if str(todelete) == str(repo['id']):
+                        # a.remove(repo)
+                        db.deleteTrackingRepo(g.user, repo['id'])
+            # print (checked)
+            # print (a)
+            # print (db.getuserrepos(g.user))
     return redirect(url_for('go_dash', ending=None))
 
 

@@ -37,9 +37,8 @@ def addToTrack(urlstr, user):
 
 def deleteTrackingRepo(user, repoId):
     doc = updateUserInfo(user)
-    # db_users.find_one_and_delete({'gitId': user.id, 'repos':{'id':repoId}})
     try:
-        db_users.delete_one({'repos': {'id': repoId}})
+        db_users.update({'gitId': 29598797}, {'$pull':{'repos': {'id': 76451566}}})
     except Exception:
         print ("can't detete repo")
 
