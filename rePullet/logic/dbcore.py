@@ -35,6 +35,14 @@ def addToTrack(urlstr, user):
             #print(db_users.find_one({'gitId': user.id, 'repos': {'$in': [{'id': repoid}]}}))
         return gh.getRepoNameById(user, repoid)
 
+def deleteTrackingRepo(user, repoId):
+    doc = updateUserInfo(user)
+    try:
+        db_users.update({'gitId': 29598797}, {'$pull':{'repos': {'id': 76451566}}})
+    except Exception:
+        print ("can't detete repo")
+
+
 
 def getuserrepos(user):
     """
