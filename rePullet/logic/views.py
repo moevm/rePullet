@@ -128,16 +128,19 @@ def delete_repo():
     # print (submitType)
     a = db.getuserrepos(g.user)
     checked = request.args.getlist("check")
-    if(submitType == "delete"):
-        if(len(checked) > 0):
+    if(len(checked) > 0):
+        if (submitType == "delete"):
             for todelete in checked:
                 for repo in a:
                     if str(todelete) == str(repo['id']):
-                        # a.remove(repo)
                         db.deleteTrackingRepo(g.user, repo['id'])
-            # print (checked)
-            # print (a)
-            # print (db.getuserrepos(g.user))
+        elif(submitType == "download"):
+            for toDownload in checked:
+                for repo in a:
+                    if str(toDownload) == str(repo['id']):
+                        link = downloadMaster(g.user, repo['id'])
+                        return redirect(link)
+        print ("Downloading", )
     return redirect(url_for('go_dash', ending=None))
 
 

@@ -5,6 +5,7 @@ import github
 from github import Github
 from github.Issue import Issue
 from github.PullRequest import PullRequest
+from github.Repository import Repository
 
 from rePullet.logic.user import User
 
@@ -103,5 +104,13 @@ def getUserName(user, login):
         if a and a.name:
             return a.name
         return login
+    except github.GithubException:
+        return None
+
+def downloadMaster(user, id):
+    try:
+        a = user.ghI.get_repo(id).get_archive_link('tarball')
+        print ("Url = " + str(a))
+        return a
     except github.GithubException:
         return None
