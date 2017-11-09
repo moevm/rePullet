@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Repo download page</title>
+
+    <script type="text/javascript">
+        function downloadInNewTab() {
+            var urls = JSON.parse('{{ link | tojson | safe }}')
+            urls.forEach(function (t, i, urls) {
+                window.open(t, '_blank')
+                window.focus()
+            })
+            history.go(-1);
+        }
+    </script>
+
+</head>
+<body onload="downloadInNewTab()">
+
+</body>
+</html>
