@@ -125,7 +125,6 @@ def post_addrepo():
 @login_required
 def delete_repo():
     submitType = request.args.get("submitType")
-    # print (submitType)
     a = db.getuserrepos(g.user)
     checked = request.args.getlist("check")
     if(len(checked) > 0):
@@ -134,14 +133,14 @@ def delete_repo():
                 for repo in a:
                     if str(todelete) == str(repo['id']):
                         db.deleteTrackingRepo(g.user, repo['id'])
+            return redirect(url_for('go_dash', ending=None))
         elif(submitType == "download"):
+            link = []
             for toDownload in checked:
                 for repo in a:
                     if str(toDownload) == str(repo['id']):
-                        link = downloadMaster(g.user, repo['id'])
-                        return redirect(link)
-        print ("Downloading", )
-    return redirect(url_for('go_dash', ending=None))
+                        link.append(downloadMaster(g.user, repo['id']))
+            return render_template('download.html', link=link)
 
 
 
