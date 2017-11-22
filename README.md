@@ -32,3 +32,5 @@ Running
 python3 __init__.py
 </pre>
 
+Docker image https://hub.docker.com/r/pr3sto/repullet/
+
