@@ -41,12 +41,11 @@ def guide():
     return app.send_static_file('Pullet.pdf')
 
 
-
 #
 # dashboard group routes
 #
 
-@app.route('/dashboard', defaults={'ending': None}, methods=['GET', 'POST']) # remember trailing slash, BITCH
+@app.route('/dashboard', defaults={'ending': None}, methods=['GET', 'POST'])  # remember trailing slash, BITCH
 @app.route('/dashboard/<path:ending>', methods=['GET', 'POST'])
 @login_required
 def go_dash(ending):

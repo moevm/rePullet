@@ -17,13 +17,15 @@
                                     <div class="btn-group">
                                         <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-cog"></i> <span class="caret"></span></a>
                                         <ul class="dropdown-menu dropdown-menu-left" role="menu">
+                                            <li class="divider"></li>
                                             <li>
-                                                <button type="submit" form="tableform" name="submitType" value="download">Download</button>
+                                                <button class="btn-link btn-block" type="submit" form="tableform" name="submitType" value="download">Download</button>
                                             </li>
                                             <li class="divider"></li>
                                             <li>
-                                                <button type="submit" class="font-red" form="tableform" name="submitType" value="delete">Delete</button>
+                                                <button type="submit" class="font-red btn-link btn-block" form="tableform" name="submitType" value="delete">Delete</button>
                                             </li>
+                                            <li class="divider"></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -36,9 +38,17 @@
                     {# сама таблица, заполняемая репозиториями #}
                     <form id="tableform" action="/api/checked" role="form" method="get">
                         <table class="table table-fhr">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Repo's full name</th>
+                                    <th>Name</th>
+                                    <th>Owner</th>
+                                </tr>
+                            </thead>
                             <tbody id="repoTBody">
                                 <tr style="display: none;"></tr>
-                                <tr class="unread checked clickable-row">
+                                {#  <tr class="unread checked clickable-row">
                                     <td class="hidden-xs">
                                         <input type="checkbox" name="check" value="dicksucker" class="checkbox">
                                     </td>
@@ -54,9 +64,10 @@
                                     <td>
                                     </td>
                                     <td>
-                                        {#12 march#}
+                                        {#12 march
                                     </td>
                                 </tr>
+                                #}
                             </tbody>
                         </table>
                     </form>

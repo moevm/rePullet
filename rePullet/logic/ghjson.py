@@ -18,7 +18,7 @@ def group_gen(urluser, urlrepo):
             if current_user not in userslist:
                 userslist.append(current_user)
         return json.dumps(userslist)
-    except:
+    except Exception as ex:
         #TODO: split exceptions
         print('groups error')
         return json.dumps({'message': 'Exception for some reason!'})
@@ -29,11 +29,11 @@ def items_gen(user, urluser, urlrepo):
         repo = user.ghI.get_repo(reponame)
         itemslist = []
         for pull in repo.get_pulls('all'):
-            issue = repo.get_issue(pull.number) # получаем номер
-            if pull.state == 'closed': # проверяем, закрыт ли PR
+            issue = repo.get_issue(pull.number)  # получаем номер
+            if pull.state == 'closed':  # проверяем, закрыт ли PR
                 if issue.user.login == issue.closed_by.login:
                     continue  # не учитываем PR, если открывший и закрывший PR совпали
-            rebuild = count_rebuild(issue, pull) #считаем количество доработок
+            rebuild = count_rebuild(issue, pull)  # считаем количество доработок
             report = countReport(pull)  # теперь узнаем, содержит ли PR отчет о лабе (pdf, doc(x))
             if pull.state == 'closed':
                 itemslist.append({'id': pull.id,
@@ -70,7 +70,7 @@ def items_gen(user, urluser, urlrepo):
         #print(itemslist)
         #print('items error')
         return json.dumps(itemslist)
-    except:
+    except Exception as ex:
         # TODO: split exceptions
         print('groups error')
         return json.dumps({'message': 'Exception for some reason!'})
@@ -95,7 +95,7 @@ def options_gen(user, urluser, urlrepo):
         options['dataAttributes'] = ['rework', 'report', 'isback']
         options['clickToUse'] = True
         return json.dumps(options)
-    except:
+    except Exception as ex:
         # TODO: split exceptions
     #    print('options error')
         return json.dumps({'message': 'Exception for some reason!'})
@@ -145,15 +145,15 @@ def rating_gen(user, urluser, urlrepo):
                 #print(student)
         #print(students)
         return json.dumps(students)
-    except:
+    except Exception as ex:
         # TODO: split exceptions
         print('rating error')
         return json.dumps({'message': 'Exception for some reason!'})
 
 
-
 def user_gen():
     return jsonify(str(g.user))
+
 
 def userrepos_json(user):
     a = db.getuserrepos(user) #repo list from db
