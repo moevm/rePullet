@@ -14,20 +14,20 @@ function getUserRepos() {
             console.log(reposData[k]['id']);
             (function(e) {
                 $("#repoTBody").find('tr:last').after(function () {
-                    return '<tr class="unread checked clickable-row" data-repo="'+reposData[e]['fullname']+'">' +
+                    return '<tr>' +
                         '<td><input style="margin: 0 auto;" type="checkbox" name="check" class="checkbox" value="'+reposData[e]['id']+'"></td>' +
                         //'<td class="hidden-xs"><i class="fa fa-star icon-state-warning"></i></td>' +
                         // '<td class="hidden-xs">id</td>' +
-                        '<td>'+reposData[e]['fullname']+'</td>' +
-                        '<td>'+reposData[e]['name']+'</td>' +
-                        '<td>'+reposData[e]['owner']+'</td>' +
+                        '<td class="clickable" data-repo="'+reposData[e]['fullname']+'">'+reposData[e]['fullname']+'</td>' +
+                        '<td class="clickable" data-repo="'+reposData[e]['fullname']+'">'+reposData[e]['name']+'</td>' +
+                        '<td class="clickable" data-repo="'+reposData[e]['fullname']+'">'+reposData[e]['owner']+'</td>' +
                         // '<td></td>' +
                         // '<td>'+reposData[e]['fullname']+'</td>' +
                         '</tr>';
                 });
             })(k);
         }
-        $(".clickable-row").click(function() {
+        $(".clickable").click(function() {
             window.location.assign('/view/'+$(this).data("repo"));
             //post('/view', {'r': $(this).data("repo")}, 'get')
         });
