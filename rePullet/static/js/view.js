@@ -97,9 +97,18 @@ function getRangesFromItems(data){
     //console.log(rangeInd)
     if (rangeInd.length != 0){
         var myNode = document.getElementById("dateDiv");
+        if (myNode == null){
+        if (myNode == null){
+            console.log("myNode prarmeter is null:", myNode);
+            return;
+        }
         var delnode = myNode.getElementsByClassName('datedivlol');
         //console.log(myNode);
         //console.log(delnode[0]);
+        if (delnode == null){
+            console.log("delnode parameter is null: ",delnode);
+            return;
+        }
         while(delnode[0]){
             myNode.removeChild(delnode[0]);
         }
@@ -193,7 +202,7 @@ function readDataranges(){
     var repoid = document.getElementById("repoid").getAttribute('src');
     var ul = document.getElementById("dateDiv");
     var items = ul.getElementsByClassName("list-group-item");
-    var fail = false;
+    var nodates = true;
     for (var i = 1; i < items.length; ++i) {
         var item = items[i];
         var inputs = item.getElementsByTagName("input");
@@ -206,19 +215,17 @@ function readDataranges(){
                 'start': inputs[1].value,
                 'end': inputs[2].value
             });
-        }
-        else{
-            fail = true
+            nodates = false;
         }
         // do something with items[i], which is a <li> element
     }
-    //if(fail){
-    //    console.log("no data in datarange!");
-    //    return;
-    //}
-    //console.log(JSON.stringify(dataranges.a));
+    if(nodates){
+       console.log("no data in datarange!");
+       return;
+    }
+    console.log(JSON.stringify(dataranges.a));
     $.post('/api/items/'+repoid, {'data': JSON.stringify(dataranges.a), 'repoid': repoid}, function() {
-        //console.log('update timeline');
+        console.log('update timeline');
         loadTimeLine()
     });
 }

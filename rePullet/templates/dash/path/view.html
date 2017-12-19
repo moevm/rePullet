@@ -8,126 +8,130 @@
         </div>
     </div>
     <div id="timeline-wrapper" class="graphs" style="display: none">
-            <h3 class="blank1">Repository Info</h3>
-            <div class="col-lg-8">
-                <div class="Compose-Message">
-                    <div class="panel panel-default" style="margin:1em 0 0 0;">
-                        <div class="panel-heading" style="cursor: inherit">
-                            PR timeline
-                        </div>
-                        <div class="panel-body no-padding">
-                            <div id="visualization"></div>
-                        </div>
-                   </div>
-                </div>
-            </div>
-        <div class="col-lg-4">
-            <div class="Compose-Message">
-            <div class="panel panel-default" style="margin:1em 0 0 0;">
-                <div class="panel-heading" style="cursor: inherit">
-                    <i class="fa fa-tasks fa-fw"></i> Pull Request Info
-                </div>
-                <div class="panel-body no-padding" style="min-height: 500px">
-                    <table id="prinfo" class="table table-bordered table-hover table-striped">
-                    <thead>
-                    <tr>
-                        <th>Property</th>
-                        <th>Value</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tbody>
-
-                    </tbody>
-                    </table>
-                </div>
-            </div>
-            </div>
-        </div>
-    </div>
-    <div id="table-wrapper" class="graphs" style="display: none">
-    {% if access %}
+        <h3 class="blank1">Repository Info</h3>
         <div class="col-lg-8">
-    {% else %}
-        <div class="col-lg-10 col-lg-offset-1">
-    {% endif %}
             <div class="Compose-Message">
-                    <div class="panel panel-default" style="margin:1em 0 0 0;">
-                        <div class="panel-heading" style="cursor: inherit">
-                            <i class="fa fa-tasks fa-fw"></i> Pull Requests Rating
-                        </div>
-                        <div class="panel-body no-padding">
-                            <table id="rating-table" class="table table-bordered table-condensed vertical-align fontsize">
-                                <thead>
-                                    <tr class="warning">
-                                        <th rowspan="2">#</th>
-                                        <th rowspan="2">GitHub login</th>
-                                        <th rowspan="2">GitHub name</th>
-                                        <th rowspan="2">GitHub link</th>
-                                        <th rowspan="2">Opened PR</th>
-                                        <th colspan="3">Closed PR</th>
-                                        <th rowspan="2">Rework</th>
-                                    </tr>
-                                    <tr class="warning">
-                                        <th>In time</th>
-                                        <th>Delay</th>
-                                        <th>All</th>
-                                    </tr>
-                              </thead>
-                              <tbody>
-                              </tbody>
-                            </table>
-                        </div>
+                <div class="panel panel-default" style="margin:1em 0 0 0;">
+                    <div class="panel-heading" style="cursor: inherit">
+                        PR timeline
                     </div>
+                    <div class="panel-body no-padding">
+                        <div id="visualization"></div>
+                    </div>
+                </div>
             </div>
         </div>
-        {% if access %}
         <div class="col-lg-4">
             <div class="Compose-Message">
                 <div class="panel panel-default" style="margin:1em 0 0 0;">
                     <div class="panel-heading" style="cursor: inherit">
-                        <i class="fa fa-tasks fa-fw"></i> Deadline Periods
+                        <i class="fa fa-tasks fa-fw"></i> Pull Request Info
                     </div>
-                    <div class="panel-body no-padding">
-                        <div id="dateDiv" class="list-group">
-                            <div class="list-group-item noline-first top10">
-                                <div class="text-right">
-                                    <button class="btn-default btn" onclick="addNewDatarange()">Add New Datarange</button>
+                    <div class="panel-body no-padding" style="min-height: 500px">
+                        <table id="prinfo" class="table table-bordered table-hover table-striped">
+                            <thead>
+                            <tr>
+                                <th>Property</th>
+                                <th>Value</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="table-wrapper" class="graphs" style="display: none">
+        {% if access %}
+            <div class="col-lg-8">
+        {% else %}
+            <div class="col-lg-10 col-lg-offset-1">
+        {% endif %}
+        <div class="Compose-Message">
+            <div class="panel panel-default" style="margin:1em 0 0 0;">
+                <div class="panel-heading" style="cursor: inherit">
+                    <i class="fa fa-tasks fa-fw"></i> Pull Requests Rating
+                </div>
+                <div class="panel-body no-padding">
+                    <table id="rating-table" class="table table-bordered table-condensed vertical-align fontsize">
+                        <thead>
+                        <tr class="warning">
+                            <th rowspan="2">#</th>
+                            <th rowspan="2">GitHub login</th>
+                            <th rowspan="2">GitHub name</th>
+                            <th rowspan="2">GitHub link</th>
+                            <th rowspan="2">Opened PR</th>
+                            <th colspan="3">Closed PR</th>
+                            <th rowspan="2">Rework</th>
+                        </tr>
+                        <tr class="warning">
+                            <th>In time</th>
+                            <th>Delay</th>
+                            <th>All</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        </div>
+        {% if access %}
+            <div class="col-lg-4">
+                <div class="Compose-Message">
+                    <div class="panel panel-default" style="margin:1em 0 0 0;">
+                        <div class="panel-heading" style="cursor: inherit">
+                            <i class="fa fa-tasks fa-fw"></i> Deadline Periods
+                        </div>
+                        <div class="panel-body no-padding">
+                            <div id="dateDiv" class="list-group">
+                                <div class="list-group-item noline-first top10">
+                                    <div class="text-right">
+                                        <button class="btn-default btn" onclick="addNewDatarange()">Add New Datarange
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
-                            <div id="unuseddiv" class="list-group-item noline top10">
-                            </div>
-                            <div id="date0div" class="list-group-item noline datedivlol">
-                                <div class="form-group">
-                                    <div class="input-group multi-control-group input-daterange">
-                                        <input type="text" class="form-control" placeholder="Matching phrase...">
-                                        <span class="input-group-addon"> | </span>
-                                        <input type="text" class="form-control tt" data-date-format='dd-mm-yyyy' value="" placeholder="date">
-                                        <span class="input-group-addon">to</span>
-                                        <input type="text" class="form-control tt" data-date-format='dd-mm-yyyy' value="" placeholder="date">
-                                        <span class="input-group-btn">
+                                <div id="unuseddiv" class="list-group-item noline top10"></div>
+                                <div id="date0div" class="list-group-item noline datedivlol">
+                                    <div class="form-group">
+                                        <div class="input-group multi-control-group input-daterange">
+                                            <input type="text" class="form-control" placeholder="Matching phrase...">
+                                            <span class="input-group-addon"> | </span>
+                                            <input type="text" class="form-control tt" data-date-format='dd-mm-yyyy'
+                                                   value="" placeholder="date">
+                                            <span class="input-group-addon">to</span>
+                                            <input type="text" class="form-control tt" data-date-format='dd-mm-yyyy'
+                                                   value="" placeholder="date">
+                                            <span class="input-group-btn">
                                             <button id="date0" class="btn btn-blockz" onclick="removeDaterange(this);">
                                                 <span class="glyphicon glyphicon-remove"></span>
                                             </button>
                                         </span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row top10">
-                            <div class="col-xs-12">
-                                <div class="text-center">
-                                    <button type="button" class="btn btni btn-labeled btn-info" onclick="readDataranges()">
-                                        <span class="btn-label"><i class="glyphicon glyphicon-refresh"></i></span>Save & Update Page
-                                    </button>
+                            <div class="row top10">
+                                <div class="col-xs-12">
+                                    <div class="text-center">
+                                        <button type="button" class="btn btni btn-labeled btn-info"
+                                                onclick="readDataranges()">
+                                            <span class="btn-label"><i class="glyphicon glyphicon-refresh"></i></span>Save
+                                            & Update Page
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
         {% endif %}
+        </div>
     </div>
-</div>
 </div>
