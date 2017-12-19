@@ -67,8 +67,8 @@ def items_gen(user, urluser, urlrepo):
                                   'style': 'background-color:rgba('
                                            ''+str(rgb[0])+','+str(rgb[1])+','+str(rgb[2])+', 0.2);'
             })
-        #print(itemslist)
-        #print('items error')
+        print(itemslist)
+        print('items error')
         return json.dumps(itemslist)
     except Exception as ex:
         # TODO: split exceptions
@@ -88,7 +88,7 @@ def options_gen(user, urluser, urlrepo):
         options['min'] = (pulldate- datetime.timedelta(days=50)).strftime('%Y-%m-%d %H:%M')
         options['max'] = (datetime.datetime.now() + datetime.timedelta(days=50)).strftime('%Y-%m-%d %H:%M')
         options['zoomMin'] = 60000
-        options['zoomMax'] = (datetime.datetime.now() - pulldate).total_seconds() * 10000
+        options['zoomMax'] = datetime.timedelta(days=100).total_seconds() * 10000
         options['height'] = '500px'
         options['verticalScroll'] = True
         options['maxHeight'] = '500px'
